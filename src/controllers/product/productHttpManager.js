@@ -7,7 +7,7 @@ import ProductManager from "./productManager.js";
 export default class ProductHttpManager {
   static async addProduct (req, res) {
     try {
-      const thumbnail = req.files.map((fileData) => { return fileData.originalname});
+      const thumbnail = req.files.map((fileData) => fileData.originalname);
       const response = await (new ProductManager()).addProduct({...req.body, thumbnail});
       if (!response) throw new BadRequest(`El producto code: ${req.body.code} ya se encuentra cargado`);
       res.status(200).json(response);
@@ -47,7 +47,7 @@ export default class ProductHttpManager {
     try {
       const pid = parseInt(req.params.pid);
       if (req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
-      const thumbnail = req.files.map((fileData) => { return fileData.originalname});
+      const thumbnail = req.files.map((fileData) => fileData.originalname);
       const response = await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail});
       res.status(200).json(response);
     } catch (error) {

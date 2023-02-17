@@ -45,11 +45,8 @@ export default class Carts {
       product.quantity += quantity;
       return;
     }
-    console.log("entra");
     // Valida que exista el producto
     const { id } = await (new ProductManager().getProductsById(pid));
-    console.log(id);
-    console.log("entra1");
     this.products.push({ product: id , quantity: quantity });
   }
 }

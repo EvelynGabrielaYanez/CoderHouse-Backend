@@ -1,6 +1,5 @@
 import Carts from "../../models/carts.js";
 import { InvalidParams, NotFound } from "../../utils/error.js";
-import ProductManager from "../product/productManager.js";
 import { __dirname } from '../../app.js';
 import { promises as fs } from 'fs';
 
@@ -26,7 +25,6 @@ export default class CartsManager {
    */
   async getCartById (id) {
     const cart = (await this.getCarts()).find(cart => cart.Id === id);
-    console.log("carro", cart);
     if (!cart) throw new NotFound('El id ingresado no corresponde a un id que se encuentre registrado');
     return cart;
   }
@@ -75,10 +73,8 @@ export default class CartsManager {
    */
   async addProduct({ cid, pid }) {
     const carts = await this.getCarts();
-    console.log(carts, pid);
-    const cart = carts.find(cart => cart.id = cid);
+    const cart = carts.find(cart => cart.id === cid);
     if (!cart) throw new InvalidParams(`El carrito de id ${cid} no existe`);
-    console.log("pod", pid);
     await cart.addProduct({ pid });
     this.writeCartsFile(carts);
   }

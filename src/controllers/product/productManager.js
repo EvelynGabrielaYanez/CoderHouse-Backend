@@ -76,6 +76,7 @@ export default class ProductManager {
     productToUpdate.Stock = stock ?? productToUpdate.Stock;
     // Actualizo el archivo de productos
     this.writeProductsFile(products);
+    return productToUpdate;
   }
 
   /**
@@ -89,6 +90,7 @@ export default class ProductManager {
     if (products.length ===  newproducts.length) throw new NotFound('El id ingresado no corresponde a un producto que se encuentre registrado');
     // Actualizo el archivo de productos
     this.writeProductsFile(newproducts);
+    return newproducts;
   }
 
   /**

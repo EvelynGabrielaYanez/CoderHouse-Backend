@@ -47,10 +47,8 @@ export default class CartsHttpManager {
    */
   static async addProduct (req, res) {
     try {
-      console.log(req.params);
       const cid = parseInt(req.params.cid);
       const pid = parseInt(req.params.pid);
-      console.log(pid);
       if (req.params.cid && isNaN(cid)) throw new BadRequest('Parametro invalido');
       if (req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
       const response = await (new CartsManager().addProduct({ cid, pid }));
