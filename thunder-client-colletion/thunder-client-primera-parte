@@ -1,0 +1,233 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "primera-parte",
+    "dateExported": "2023-02-17T00:19:16.255Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "products",
+            "containerId": "",
+            "created": "2023-02-12T21:00:05.618Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "46c40830-8fed-4389-b472-682d77dfebff",
+            "name": "carts",
+            "containerId": "",
+            "created": "2023-02-12T21:00:16.029Z",
+            "sortNum": 20000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "40d6679c-6245-4541-b0ec-24aae621278b",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "save-product",
+            "url": "http://localhost:8080/api/products/",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-02-12T18:47:31.838Z",
+            "modified": "2023-02-17T00:16:41.010Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "title",
+                        "value": "Producto sin imagen"
+                    },
+                    {
+                        "name": "description",
+                        "value": "Producto sin imagen"
+                    },
+                    {
+                        "name": "code",
+                        "value": "00010"
+                    },
+                    {
+                        "name": "price",
+                        "value": "900"
+                    },
+                    {
+                        "name": "stock",
+                        "value": "9"
+                    },
+                    {
+                        "name": "category",
+                        "value": "GATOS"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "thumbnails",
+                        "value": "c:\\Users\\evely\\OneDrive\\Imágenes\\Capturas de pantalla\\2023-02-02.png"
+                    },
+                    {
+                        "name": "thumbnails",
+                        "value": "e:\\Captura-error.JPG"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "77cd8950-8be6-4263-965f-2d87c469f9e0",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "46c40830-8fed-4389-b472-682d77dfebff",
+            "name": "create-cart",
+            "url": "http://localhost:8080/api/carts/",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-02-12T21:00:52.433Z",
+            "modified": "2023-02-12T21:01:37.498Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5a4be11c-d9a0-4299-bbe6-4607c4de9771",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "update-product",
+            "url": "http://localhost:8080/api/products/3",
+            "method": "PUT",
+            "sortNum": 20000,
+            "created": "2023-02-12T20:52:02.893Z",
+            "modified": "2023-02-17T00:12:21.320Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "title",
+                        "value": "Producto1 Actualizado"
+                    },
+                    {
+                        "name": "description",
+                        "value": "Este es el primer producto actualizado"
+                    },
+                    {
+                        "name": "code",
+                        "value": "456abc"
+                    },
+                    {
+                        "name": "price",
+                        "value": "555.55"
+                    },
+                    {
+                        "name": "stock",
+                        "value": "9"
+                    },
+                    {
+                        "name": "category",
+                        "value": "PERROS"
+                    }
+                ],
+                "files": [
+                    {
+                        "name": "thumbnails",
+                        "value": "c:\\Users\\evely\\OneDrive\\Imágenes\\Capturas de pantalla\\2023-02-02.png"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "693e51be-56d7-4bf6-858a-19d09ab1fa51",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "46c40830-8fed-4389-b472-682d77dfebff",
+            "name": "get-cart-products",
+            "url": "http://localhost:8080/api/carts/1",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-02-12T21:20:50.275Z",
+            "modified": "2023-02-13T23:46:52.119Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "70e3cf49-ea26-49a7-9304-c3abb73d072c",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "get-products",
+            "url": "http://localhost:8080/api/products",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-02-12T20:35:23.632Z",
+            "modified": "2023-02-12T21:00:09.113Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "limit",
+                    "value": "2",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "91a474e8-634d-42e4-aa09-e7ef0d15a591",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "46c40830-8fed-4389-b472-682d77dfebff",
+            "name": "add-cart-product",
+            "url": "http://localhost:8080/api/carts/1/product/3",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-02-12T21:33:18.237Z",
+            "modified": "2023-02-12T22:05:54.264Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "95c82b2c-b0df-4145-a608-cfa329dd625d",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "get-product-by-id",
+            "url": "http://localhost:8080/api/products/2",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-02-12T20:55:23.586Z",
+            "modified": "2023-02-12T21:00:09.937Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "limit",
+                    "value": "2",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "49a408f4-3598-4564-8eed-52a953bf3bc0",
+            "colId": "17d22c16-8b4a-415f-9fbe-57489b1afd39",
+            "containerId": "eec9efdb-2ff8-4ab7-94fd-9cac6cb0f6b8",
+            "name": "delete-product",
+            "url": "http://localhost:8080/api/products/5",
+            "method": "DELETE",
+            "sortNum": 50000,
+            "created": "2023-02-12T20:56:05.523Z",
+            "modified": "2023-02-12T21:00:10.916Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "limit",
+                    "value": "2",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
