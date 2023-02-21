@@ -1,0 +1,26 @@
+<div id={{product.id}} class="product">
+  <div>
+    <div class="productTitle">
+      <p>{{product.title}}</p>
+    </div>
+    {{#if this.thumbnail.length}}
+      <img src="img/{{this.thumbnail.[0]}}" alt="{{product.description}}">
+    {{/if}}
+    <div class="productBottom">
+      <p>
+        Code: {{product.code}}
+      </p>
+      <p>
+        Descripcion: {{product.description}}
+      </p>
+      <p>
+        Precio: {{product.price}}
+      </p>
+    </div>
+  </div>
+  {{#if deleteEnable}}
+    <div>
+      <button class="deleteProduct" productId={{product.id}}>Eliminar</button>
+    </div>
+  {{/if}}
+</div>

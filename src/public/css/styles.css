@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo - nav */
+nav ul {
+  list-style-type: none;
+  overflow: hidden;
+  background-color: #1f2c4d;
+}
+nav ul li {
+  float: left;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #140f07;
+}
+
+body {
+    background-color: #9b9afa;
+}
+
+#products {
+  background-color: #9b9afa;
+  padding: 15px;
+  list-style-type: none;
+  overflow: hidden;
+}
+#products li{
+  float: left;
+}
+.product {
+  display: block;
+  margin: 5px;
+  padding: 15px;
+  width: 50vh;
+  border-style:solid;
+  border-color: #a58f8f;
+  border-width: 1px;
+  border-radius: 2%;
+  background-color: #fae1f6;
+  overflow: hidden;
+  white-space: nowrap;
+  box-shadow: 2px 2px 2px #140f07;
+}
+
+.product img {
+    max-height:100%;
+    max-width:100%;
+}
+
+.title {
+  background-color:#525ea5;
+  border-top-style: solid;
+  border-color: #525ea5;
+  border-width: 1px;
+  text-align: center;
+  color: white;
+  font-size: 30px;
+}
+
+/* Estilos form*/
+#formNewProduct {
+  margin: auto;
+  width: 40%;
+  padding: 2vh;
+  height: 40vh;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  min-height: 40px;
+  min-width: 40vh;
+}

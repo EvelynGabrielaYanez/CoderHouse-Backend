@@ -1,0 +1,14 @@
+<h2 class="title">Agregar Producto</h2>
+{{>product/newProduct}}
+<h2 class="title">Lista de productos</h2>
+{{#if products.length}}
+  <ul id="products">
+  {{#each products}}
+    <li>
+      {{> product/product product=this deleteEnable=true}}
+    </li>
+  {{/each}}
+  </el>
+{{else }}
+  <p>No hay productos cargados</p>
+{{/if}}
