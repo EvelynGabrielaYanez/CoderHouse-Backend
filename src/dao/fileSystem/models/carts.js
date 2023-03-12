@@ -1,5 +1,5 @@
-import ProductManager from "../controllers/product/productManager.js";
-import { InvalidParams } from "../utils/error.js";
+import ProductManager from "../../../controllers/productManager.js";
+import { InvalidParams } from "../../../utils/error.js";
 import Product from "./product.js";
 
 export default class Carts {

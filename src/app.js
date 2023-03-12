@@ -6,6 +6,7 @@ import { productRouter } from './routes/products.routes.js';
 import { cartsRouter } from './routes/carts.routes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -13,6 +14,9 @@ export const __dirname = path.dirname(__filename);
 dotEnv.config();
 
 const app = express();
+mongoose.connect(process.env.DB_URL)
+.then(() => console.log('Conexión a la base realizada con éxito'))
+.catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
 // Se define el puerto
 const port = process.env.PORT || "8080";

@@ -1,4 +1,4 @@
-import { InvalidParams } from "../utils/error.js";
+import { InvalidParams } from "../../../utils/error.js";
 
 export default class Product {
   static lastId = 0;

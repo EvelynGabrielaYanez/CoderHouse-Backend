@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import multer from 'multer';
-import ProductHttpManager from '../controllers/product/productHttpManager.js';
+import ProductHttpManager from '../wrappers/productHttpManager.js';
 
 const upload = multer({
   storage: multer.diskStorage({
