@@ -1,10 +1,7 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const MessageModel = mongoose.model("Message", new Schema({
-  user: {
-      type: String,
-      unique: true
-  },
+  user: String,
   message: String
 }));
 

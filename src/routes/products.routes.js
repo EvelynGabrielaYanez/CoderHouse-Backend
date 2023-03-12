@@ -13,7 +13,7 @@ const upload = multer({
   })
 });
 
-export const productRouter = Router();
+const productRouter = Router();
 
 productRouter.post('/', upload.array('thumbnails'), ProductHttpManager.addProduct);
 
@@ -24,3 +24,5 @@ productRouter.get('/:pid', ProductHttpManager.getProductsById);
 productRouter.put('/:pid', upload.array('thumbnails'), ProductHttpManager.updateProduct);
 
 productRouter.delete('/:pid', ProductHttpManager.deleteProduct);
+
+export default productRouter;
