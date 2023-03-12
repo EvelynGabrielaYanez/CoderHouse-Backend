@@ -3,7 +3,7 @@ import MessageHttpManager from '../wrappers/messageHttpManager.js';
 
 const messageRouter = Router();
 
-messageRouter.get("/", (req,res) => res.render("index", {}))
+messageRouter.get("/", (req,res) => res.render("chat", {}))
 messageRouter.get('/message', MessageHttpManager.getMessage);
 
 export default messageRouter;

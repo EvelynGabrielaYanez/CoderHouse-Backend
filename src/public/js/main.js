@@ -6,16 +6,10 @@ const chatBox = document.getElementById("chatBox")
 const rederMessage = (messageList) => {
   parrafosMensajes.innerHTML = "";
   messageList.forEach(({ message, user }) => {
-    parrafosMensajes.innerHTML += `<p><b>${message}</b>: ${user} </p>`;
+    parrafosMensajes.innerHTML += `<p><b>${user}</b>: ${message} </p>`;
   });
 }
 
-fetch('http://localhost:8080/message')
-  .then(async response => {
-    const messageList = await response.json();
-    rederMessage(messageList);
-  })
-  .then(data => console.log(data));
 let email
 Swal.fire({
   title: "Identificación",
@@ -27,7 +21,12 @@ Swal.fire({
   allowOutsideClick: false
 }).then(resultado => {
   email = resultado.value;
-  console.log(email);
+  fetch('http://localhost:8080/message')
+  .then(async response => {
+    const messageList = await response.json();
+    rederMessage(messageList);
+  })
+  .catch(error => console.log(error));
 })
 
 botonChat.addEventListener("click", () => {
@@ -37,9 +36,4 @@ botonChat.addEventListener("click", () => {
   }
 })
 
-socket.on("message", messageList => {
-  parrafosMensajes.innerHTML = "";
-  messageList.forEach(({ message, user }) => {
-    parrafosMensajes.innerHTML += `<p><b>${user}</b>: ${message} </p>`;
-  });
-})
+socket.on("message", messageList => rederMessage(messageList))
