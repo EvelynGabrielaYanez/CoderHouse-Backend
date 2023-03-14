@@ -20,8 +20,8 @@ dotEnv.config();
 
 const app = express();
 mongoose.connect(process.env.DB_URL)
-.then(() => console.log('Conexión a la base realizada con éxito'))
-.catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
+  .then(() => console.log('Conexión a la base realizada con éxito'))
+  .catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
 // Se define el puerto
 const port = process.env.PORT || "8080";

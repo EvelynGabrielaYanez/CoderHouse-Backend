@@ -1,5 +1,6 @@
 
 import CartsManager from '../dao/mongoDB/controllers/cartsManager.js';
+import FsCartsManager from '../dao/fileSystem/controllers/cartsManager.js';
 import { BadRequest, NotFound } from "../utils/error.js";
 /**
  * Clase encargada de manejar la captura de errores, validar
@@ -14,7 +15,7 @@ export default class CartsHttpManager {
     try {
       const cid = process.env.DB_SELECTION === 'MongoDB' ? req.params.cid : parseInt(req.params.cid);
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.cid && isNaN(cid)) throw new BadRequest('Parametro invalido');
-      const response = await (new CartsManager().getCartsProducts(cid));
+      const response = process.env.DB_SELECTION === 'MongoDB' ?  await (new CartsManager().getCartsProducts(cid)) : await (new FsCartsManager().getCartsProducts(cid));
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
@@ -30,7 +31,7 @@ export default class CartsHttpManager {
    */
   static async save (req, res) {
     try {
-      const response = await (new CartsManager().save());
+      const response = process.env.DB_SELECTION === 'MongoDB' ? await (new CartsManager().save()) : await (new FsCartsManager().save());
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
@@ -51,7 +52,7 @@ export default class CartsHttpManager {
       const pid = process.env.DB_SELECTION === 'MongoDB' ? req.params.pid : parseInt(req.params.pid);
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.cid && isNaN(cid)) throw new BadRequest('Parametro invalido');
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
-      const response = await (new CartsManager().addProduct({ cid, pid }));
+      const response = process.env.DB_SELECTION === 'MongoDB' ?  await (new CartsManager().addProduct({ cid, pid })) : await (new FsCartsManager().addProduct({ cid, pid }));
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });

@@ -1,6 +1,6 @@
 import Carts from "../models/carts.js";
-import { InvalidParams, NotFound } from "../../utils/error.js";
-import { __dirname } from '../../app.js';
+import { InvalidParams, NotFound } from "../../../utils/error.js";
+import { __dirname } from '../../../app.js';
 import { promises as fs } from 'fs';
 
 export default class CartsManager {

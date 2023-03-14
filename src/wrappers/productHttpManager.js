@@ -1,4 +1,5 @@
 import ProductManager from '../dao/mongoDB/controllers/productManager.js';
+import FsProductManager from '../dao/fileSystem/controllers/productManager.js';
 import { BadRequest, NotFound } from "../utils/error.js";
 
 /**
@@ -8,7 +9,7 @@ export default class ProductHttpManager {
   static async addProduct (req, res) {
     try {
       const thumbnail = req.files.map((fileData) => fileData.originalname);
-      const response = await (new ProductManager()).addProduct({...req.body, thumbnail});
+      const response = process.env.DB_SELECTION === 'MongoDB' ? await (new ProductManager()).addProduct({...req.body, thumbnail}) : await (new FsProductManager()).addProduct({...req.body, thumbnail});
       if (!response) throw new BadRequest(`El producto code: ${req.body.code} ya se encuentra cargado`);
       res.status(200).json(response);
     } catch (error) {
@@ -21,7 +22,7 @@ export default class ProductHttpManager {
     try {
       const limit = parseInt(req.query.limit);
       if (req.query.limit && isNaN(limit)) throw new BadRequest('Parametro invalido');
-      const response = await (new ProductManager()).getProducts(limit);
+      const response = process.env.DB_SELECTION === 'MongoDB' ? await (new ProductManager().getProducts(limit)) : await (new FsProductManager().getProducts(limit)) ;
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
@@ -34,7 +35,7 @@ export default class ProductHttpManager {
     try {
       const pid = process.env.DB_SELECTION === 'MongoDB' ? req.params.pid : parseInt(req.params.pid);
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
-      const response = await (new ProductManager().getProductsById(pid));
+      const response = process.env.DB_SELECTION === 'MongoDB' ? await (new ProductManager().getProductsById(pid)) : await (new FsProductManager().getProductsById(pid)) ;
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
@@ -48,7 +49,7 @@ export default class ProductHttpManager {
       const pid = process.env.DB_SELECTION === 'MongoDB' ? req.params.pid : parseInt(req.params.pid);
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
       const thumbnail = req.files.map((fileData) => fileData.originalname);
-      const response = await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail});
+      const response =  process.env.DB_SELECTION === 'MongoDB' ? await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail}) :  await (new FsProductManager()).updateProduct({ ...req.body, id: pid, thumbnail});
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
@@ -61,7 +62,7 @@ export default class ProductHttpManager {
     try {
       const pid = process.env.DB_SELECTION === 'MongoDB' ? req.params.pid : parseInt(req.params.pid);
       if (process.env.DB_SELECTION !== 'MongoDB' && req.params.pid && isNaN(pid)) throw new BadRequest('Parametro invalido');
-      const response = await (new ProductManager()).deleteProduct(pid);
+      const response =  process.env.DB_SELECTION === 'MongoDB' ? await (new ProductManager()).deleteProduct(pid) : await (new FsProductManager()).deleteProduct(pid) ;
       res.status(200).json({ deletedCount: response });
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
