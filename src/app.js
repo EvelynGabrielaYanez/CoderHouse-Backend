@@ -1,7 +1,5 @@
 import express from 'express';
-
 import * as dotEnv from 'dotenv';
-
 import productRouter from './routes/products.routes.js';
 import cartsRouter from './routes/carts.routes.js';
 import messageRouter from './routes/message.routes.js';

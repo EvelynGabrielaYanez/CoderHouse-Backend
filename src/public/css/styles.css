@@ -1,3 +1,68 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
 body {
-    background-color: rgb(167, 65, 192);
+  background-color: #14294e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#mainBox {
+  background-color: #818df7;
+  display: block;
+  min-height: 100vh;
+  width: 80%;
+}
+
+h1 {
+  text-align: center;
+  color: #f3eae8;
+  border-bottom: 1px solid #14294e;
+  background-color: #43589d;
+  position: fixed;
+  top: 0;
+  width: inherit;
+  height: 40px;
+}
+
+#inputBox {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  height: 50px;
+  width: inherit;
+  justify-content: center;
+  align-items: center;
+  background-color: #43589d;
+}
+#chatBox {
+  padding: 10px;
+  margin: 5px;
+  margin-top: 40px;
+}
+
+#inputBox input {
+  width: 70%;
+  height: 30px;
+}
+
+#inputBox button {
+  width: 20%;
+  height: 30px;
+}
+p {
+  margin-bottom: 5px;
+  font-size: 30px;
+  color: #00000a;
+}
+
+.userMessage {
+  text-align: right;
+}
+
+.otherUser {
+    text-align: left;
 }

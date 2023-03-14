@@ -1,16 +1,17 @@
-const socket = io()
-const botonChat = document.getElementById("botonChat")
-const parrafosMensajes = document.getElementById("parrafosMensajes")
-const chatBox = document.getElementById("chatBox")
+const socket = io();
+const chatButton = document.getElementById("chatButton");
+const messageList = document.getElementById("messageList");
+const chatInput = document.getElementById("chatInput");
 
-const rederMessage = (messageList) => {
-  parrafosMensajes.innerHTML = "";
-  messageList.forEach(({ message, user }) => {
-    parrafosMensajes.innerHTML += `<p><b>${user}</b>: ${message} </p>`;
+let email;
+
+const rederMessage = (newMessageList) => {
+  messageList.innerHTML = "";
+  newMessageList.forEach(({ message, user }) => {
+    messageList.innerHTML += `<p class="${user === email ? "userMessage" : "otherUser"}"><b>${user}</b>: ${message} </p>`;
   });
 }
 
-let email
 Swal.fire({
   title: "Identificación",
   text: "Por favor ingrese su correo de usuario",
@@ -27,13 +28,13 @@ Swal.fire({
     rederMessage(messageList);
   })
   .catch(error => console.log(error));
-})
+});
 
-botonChat.addEventListener("click", () => {
-  if(chatBox.value.trim().length > 0) {
-    socket.emit("message", { user: email, message: chatBox.value })
-    chatBox.value = ""
+chatButton.addEventListener("click", () => {
+  if(chatInput.value.trim().length > 0) {
+    socket.emit("message", { user: email, message: chatInput.value })
+    chatInput.value = ""
   }
-})
+});
 
-socket.on("message", messageList => rederMessage(messageList))
+socket.on("message", messageList => rederMessage(messageList));
