@@ -1,5 +1,5 @@
 
-import Message from '../models/message.js'
+import Message from '../../dao/models/message.js'
 
 export default class MessageManager {
   /**

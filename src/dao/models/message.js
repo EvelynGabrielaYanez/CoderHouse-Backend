@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const MessageModel = mongoose.model("Message", new Schema({
+const MessageModel = mongoose.model("messages", new Schema({
   user: String,
   message: String
 }));

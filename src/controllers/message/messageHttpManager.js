@@ -1,5 +1,5 @@
 
-import MessageManager from '../dao/mongoDB/controllers/messageManager.js';
+import MessageManager from './messageManager.js';
 /**
  * Clase encargada de manejar la captura de errores, validar
  */

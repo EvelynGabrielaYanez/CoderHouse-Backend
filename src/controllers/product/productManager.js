@@ -1,5 +1,5 @@
-import Product from '../models/product.js';
-import { NotFound } from "../../../utils/error.js";
+import Product from '../../dao/models/product.js';
+import { NotFound } from "../../utils/error.js";
 
 /**
  * Clase encargada de manejar el listado de productos
@@ -12,7 +12,7 @@ export default class ProductManager {
    */
   async addProduct (newProductData = {}) {
     let newProduct = null;
-    const products = await this.getProducts();
+    const products = await this.getProducts().payload;
     const noExist = products.every(product => newProductData.code !== product.code);
     if (!noExist) return newProduct;
     newProduct = new Product(newProductData);
@@ -24,9 +24,13 @@ export default class ProductManager {
    * Método encargado de retornar el listado de prodcutos
    * @returns Product[]
    */
-  async getProducts (limit) {
-    const response = await Product.find().exec();
-    return response.slice(0, limit || response.length);
+  async getProducts ({page, limit, query, sort}) {
+    const { docs = [], ...rest } = await Product.paginate(query,{
+      page: page || 1 ,
+      limit: limit || 10,
+      sort: sort || {}
+    });
+    return { payload: docs, ...rest };
   }
 
   /**

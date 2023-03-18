@@ -1,11 +1,22 @@
 import mongoose, { Schema } from "mongoose";
-
-const CartsModel = mongoose.model('Carts', new Schema({
+const cartsSchema =  new Schema({
   products: {
-    type: [{product: String, quantity:Number}],
+    type: [{
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products'
+      },
+      quantity:Number
+    }],
     default: []
   },
-}));
+});
+
+cartsSchema.pre('find', function() {
+  this.populate('products.product');
+});
+
+const CartsModel = mongoose.model('carts', cartsSchema);
 
 export default  class Carts extends CartsModel {
   constructor (data) {
@@ -17,7 +28,7 @@ export default  class Carts extends CartsModel {
    */
   async addProduct ({ pid, quantity = 1}) {
     // busca el producto en el listado actualizar
-    const product = this.products.find(({product}) => product === pid);
+    const product = this.products.find(({product}) => product._id.equals(pid));
     if (product)
       product.quantity += quantity;
     else if (this.products.length){

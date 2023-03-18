@@ -1,6 +1,6 @@
 
-import { InvalidParams, NotFound } from "../../../utils/error.js";
-import Carts from "../models/carts.js";
+import { InvalidParams, NotFound } from "../../utils/error.js";
+import Carts from "../../dao/models/carts.js";
 
 export default class CartsManager {
   /**
@@ -9,7 +9,7 @@ export default class CartsManager {
    * @returns {}
    */
   async getCartById (id) {
-    const cart = await Carts.findById(id).exec();
+    const cart = await Carts.findById(id).populate('products.product').exec();
     if (!cart) throw new NotFound('El id ingresado no corresponde a un id que se encuentre registrado');
     return cart;
   }
@@ -34,8 +34,8 @@ export default class CartsManager {
   }
 
   async getCartsProducts (cid) {
-    const { products } = await (new CartsManager().getCartById(cid));
-    return products;
+    return await (new CartsManager().getCartById(cid));
+    
   }
 
   /**
@@ -51,4 +51,45 @@ export default class CartsManager {
     await cart.save();
     return cart;
   }
+
+  /**
+   * Método encargado de eliminar un producto del carrito
+   * @param {*} param0
+   * @returns
+   */
+  async deleteProduct({ cid, pid }) {
+    const result = await Carts.updateOne({_id: cid}, {
+      $pull: {
+        products: { product: pid }
+      }
+    }).exec();
+    return result;
+  }
+
+  async updateProductQty({ cid, pid , qty }) {
+    const result = await Carts.updateOne({
+      _id: cid,
+      "products.product": pid,
+    },
+    {
+      "$set": {
+        "products.$.quantity": qty
+      }
+    }).exec();
+    return result;
+  }
+
+  async updateProduct() {
+
+  }
+
+  async deleteProducts(cid) {
+    const result = await Carts.updateOne({_id: cid}, {
+      $set: {
+        products: []
+      }
+    }).exec();
+    return result;
+  }
+
 }

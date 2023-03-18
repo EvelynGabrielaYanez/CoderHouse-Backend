@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { Server } from "socket.io";
 import { engine } from 'express-handlebars';
-import MessageManager from './dao/mongoDB/controllers/messageManager.js';
+import MessageManager from './controllers/message/messageManager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);

@@ -1,7 +1,7 @@
-import Product from '../models/product.js';
+import Product from '../../models/product.js';
 import { promises as fs } from 'fs';
-import { InvalidParams, NotFound } from '../../../utils/error.js';
-import { __dirname } from '../../../app.js';
+import { InvalidParams, NotFound } from '../../utils/error.js';
+import { __dirname } from '../../app.js';
 
 /**
  * Clase encargada de manejar el listado de productos
