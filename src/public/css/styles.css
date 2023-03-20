@@ -84,7 +84,7 @@ th, td {
   display: inline-block;
 }
 
-.pagination button {
+.pagination a {
   color: black;
   float: left;
   padding: 8px 16px;
@@ -92,13 +92,13 @@ th, td {
   text-decoration: none;
 }
 
-.pagination button.active {
+.pagination a.active {
   background-color: #4CAF50;
   color: white;
   border-radius: 5px;
 }
 
-.pagination button:hover:not(.active) {
+.pagination a:hover:not(.active) {
   background-color: #ddd;
   border-radius: 5px;
 }
