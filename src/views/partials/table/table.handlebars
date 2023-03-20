@@ -1,0 +1,27 @@
+<div class="table">
+<table>
+  <thead>
+    <tr>
+      {{#each data.columns}}
+        <th>{{this}}</th>
+      {{/each}}
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each data.values}}
+      <tr id={{this.id}}>
+        {{#each this}}
+          {{#ifNotEq @key "id"}}
+            <td>{{this}}</td>
+          {{/ifNotEq}}
+        {{/each}}
+          <td>
+            <button class="addProduct">Agregar</button>
+            <button class="deleteProduct">Borrar</button>
+          </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>

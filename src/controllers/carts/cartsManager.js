@@ -35,7 +35,6 @@ export default class CartsManager {
 
   async getCartsProducts (cid) {
     return await (new CartsManager().getCartById(cid));
-    
   }
 
   /**

@@ -1,40 +1,31 @@
-const socket = io();
-const chatButton = document.getElementById("chatButton");
-const messageList = document.getElementById("messageList");
-const chatInput = document.getElementById("chatInput");
-
-let email;
-
-const rederMessage = (newMessageList) => {
-  messageList.innerHTML = "";
-  newMessageList.forEach(({ message, user }) => {
-    messageList.innerHTML += `<p class="${user === email ? "userMessage" : "otherUser"}"><b>${user}</b>: ${message} </p>`;
-  });
+async function addCartProduct(event) {
+  const productID = event.target.parentNode.parentNode.id;
+  const newList = await fetch(`${window.location.origin}/api/carts/641688c2496d77c3b41a2764/product/${productID}`, { method: 'POST' });
 }
 
-Swal.fire({
-  title: "Identificación",
-  text: "Por favor ingrese su correo de usuario",
-  input: "text",
-  inputValidator: (valor) => {
-    return !valor && 'Ingrese un valor valido';
-  },
-  allowOutsideClick: false
-}).then(resultado => {
-  email = resultado.value;
-  fetch('http://localhost:8080/message')
-  .then(async response => {
-    const messageList = await response.json();
-    rederMessage(messageList);
-  })
-  .catch(error => console.log(error));
-});
+async function deleteCartProduct(event) {
+  const productID = event.target.parentNode.parentNode.id;
+  const newList = await fetch(`${window.location.origin}/api/carts/641688c2496d77c3b41a2764/product/${productID}`, { method: 'DELETE' });
+}
 
-chatButton.addEventListener("click", () => {
-  if(chatInput.value.trim().length > 0) {
-    socket.emit("message", { user: email, message: chatInput.value })
-    chatInput.value = ""
-  }
-});
+const addAllDeleteEvent = () => {
+  const test = document.getElementsByClassName("deleteProduct");
+  Array.prototype.forEach.call(test, addDeleteEvent);
+};
+const addDeleteEvent = deleteButton => {
+  deleteButton.addEventListener("click", deleteProduct);
+};
+const addAllAddEvent = () => {
+  const test = document.getElementsByClassName("addProduct");
+  Array.prototype.forEach.call(test, addAddEvent);
+};
+const addAddEvent = deleteButton => {
+  deleteButton.addEventListener("click", addProduct);
+};
+addAllDeleteEvent();
+addAllAddEvent();
 
-socket.on("message", messageList => rederMessage(messageList));
+
+async function nextPage (page) {
+  await fetch(page);
+};

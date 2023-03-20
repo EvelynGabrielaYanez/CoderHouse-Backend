@@ -19,18 +19,19 @@ export default class ProductHttpManager {
 
   static async getProducts (req, res) {
     try {
-      console.log(req);
       let { limit = null, sort = '{}', page = null, query = '{}' } = req.query;
       limit = limit ? parseInt(limit) : limit;
       sort = JSON.parse(sort);
       page = page ? parseInt(page) : page;
       query = JSON.parse(query);
-      const {totalDocs,...rest} = await (new ProductManager().getProducts({ limit, page, sort, query }));
+      const productManager = new ProductManager();
+      const { totalDocs, ...rest } = await (productManager.getProducts({ limit, page, sort, query }));
+      const { nextLink, prevLink } = productManager.calculateNextPrevPage(req, rest.nextPage, rest.prevPage);
       res.status(200).json({
         totalDocs,
         ...rest,
-        prevLink: '',
-        nextLink: rest.page
+        prevLink: prevLink,
+        nextLink: nextLink
       });
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
