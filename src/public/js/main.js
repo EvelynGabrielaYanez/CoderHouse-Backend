@@ -1,11 +1,13 @@
+const temporalCartId = '6418edc473e5b0b8f080a4c4';
+
 async function addCartProduct(event) {
   const productID = event.target.parentNode.parentNode.id;
-  const newList = await fetch(`${window.location.origin}/api/carts/641688c2496d77c3b41a2764/product/${productID}`, { method: 'POST' });
+  await fetch(`${window.location.origin}/api/carts/${temporalCartId}/product/${productID}`, { method: 'POST' });
 }
 
 async function deleteCartProduct(event) {
   const productID = event.target.parentNode.parentNode.id;
-  const newList = await fetch(`${window.location.origin}/api/carts/641688c2496d77c3b41a2764/product/${productID}`, { method: 'DELETE' });
+  await fetch(`${window.location.origin}/api/carts/${temporalCartId}/product/${productID}`, { method: 'DELETE' });
 }
 
 const addAllDeleteEvent = () => {

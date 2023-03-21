@@ -11,7 +11,11 @@ const productSchema = new Schema({
   },
   code: String,
   stock: Number,
-  status: Number
+  status: {
+    type: Number,
+    default: 1
+  },
+  category: String
 });
 productSchema.plugin(paginate);
 const Product = mongoose.model('products', productSchema);

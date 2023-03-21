@@ -28,72 +28,51 @@ h1 {
   height: 40px;
 }
 
-#inputBox {
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  height: 50px;
-  width: inherit;
-  justify-content: center;
-  align-items: center;
-  background-color: #43589d;
-}
-#chatBox {
-  padding: 10px;
-  margin: 5px;
-  margin-top: 40px;
-}
-
-#inputBox input {
-  width: 70%;
-  height: 30px;
-}
-
-#inputBox button {
-  width: 20%;
-  height: 30px;
-}
-p {
-  margin-bottom: 5px;
-  font-size: 30px;
-  color: #00000a;
-}
-
-.userMessage {
-  text-align: right;
-}
-
-.otherUser {
-    text-align: left;
-}
-
 table {
+  margin-top: 50px;
   width: 100%;
 }
 
+th {
+  background-color: #43589d;
+  color: #ddd;
+}
+
 table, th, td {
-  border: 1px solid lightgrey;
+  border: 1px solid black;
   border-collapse: collapse;
+}
+
+tbody {
+  background-color: #ddd;
+  color: black;
 }
 
 th, td {
   padding: 2px 4px;
 }
 
+.paginationBox {
+  margin-top: 10px;
+  text-align: center;
+}
 .pagination {
   display: inline-block;
+  justify-content: center;
+  align-content: center;
 }
 
 .pagination a {
   color: black;
   float: left;
+  font-weight: bold;
   padding: 8px 16px;
   background-color: transparent;
   text-decoration: none;
 }
 
 .pagination a.active {
-  background-color: #4CAF50;
+  background-color: #43589d;
   color: white;
   border-radius: 5px;
 }
