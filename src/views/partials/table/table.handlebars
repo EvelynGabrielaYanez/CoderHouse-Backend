@@ -5,7 +5,9 @@
       {{#each data.columns}}
         <th>{{this}}</th>
       {{/each}}
-      <th>Acción</th>
+      {{#if abm}}
+        <th>Acción</th>
+      {{/if}}
     </tr>
   </thead>
   <tbody>
@@ -16,10 +18,12 @@
             <td>{{this}}</td>
           {{/ifNotEq}}
         {{/each}}
+        {{#if ../abm}}
           <td>
             <button class="addProduct">Agregar</button>
             <button class="deleteProduct">Borrar</button>
           </td>
+        {{/if}}
       </tr>
     {{/each}}
   </tbody>

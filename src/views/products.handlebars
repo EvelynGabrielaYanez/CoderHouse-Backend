@@ -1,9 +1,7 @@
-<div id="mainBox">
 <h1 class='title'>Lista de productos</h2>
 <div id='products'>
   {{> table/table data=data abm=true add='addProduct' delete='deleteProduct'}}
   <div class="paginationBox">
     {{>pagination pagination=paginateData}}
   </div>
-</div>
 </div>

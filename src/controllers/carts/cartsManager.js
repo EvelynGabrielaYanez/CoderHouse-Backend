@@ -78,8 +78,13 @@ export default class CartsManager {
     return result;
   }
 
-  async updateProduct() {
-
+  async updateProducts(cid, products) {
+    const result = await Carts.updateOne({_id: cid}, {
+      $set: {
+        products: products
+      }
+    }).exec();
+    return result;
   }
 
   async deleteProducts(cid) {

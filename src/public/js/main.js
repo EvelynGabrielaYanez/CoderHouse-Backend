@@ -15,14 +15,14 @@ const addAllDeleteEvent = () => {
   Array.prototype.forEach.call(test, addDeleteEvent);
 };
 const addDeleteEvent = deleteButton => {
-  deleteButton.addEventListener("click", deleteProduct);
+  deleteButton.addEventListener("click", deleteCartProduct);
 };
 const addAllAddEvent = () => {
   const test = document.getElementsByClassName("addProduct");
   Array.prototype.forEach.call(test, addAddEvent);
 };
 const addAddEvent = deleteButton => {
-  deleteButton.addEventListener("click", addProduct);
+  deleteButton.addEventListener("click", addCartProduct);
 };
 addAllDeleteEvent();
 addAllAddEvent();

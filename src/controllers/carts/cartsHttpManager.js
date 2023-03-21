@@ -1,6 +1,7 @@
 
 import CartsManager from './cartsManager.js';
 import { BadRequest, NotFound } from "../../utils/error.js";
+import ProductManager from '../product/productManager.js';
 /**
  * Clase encargada de manejar la captura de errores, validar
  */
@@ -63,9 +64,17 @@ export default class CartsHttpManager {
    * @param {*} req
    * @param {*} res
    */
-    static async updateProduct (req, res) {
+    static async updateProducts (req, res) {
       try {
-        res.status(200).json({});
+        const products = req.body;
+        const cid = req.params.cid;
+        for(const {product, quantity} of products) {
+            if(!product || isNaN(quantity)) throw new BadRequest('Parametros invalidos');
+            const productFinded = await new ProductManager().getProductsById(product);
+            if(!productFinded) throw new BadRequest('Parametros invalidos');
+        }
+        const response = await (new CartsManager().updateProducts(cid, products));
+        res.status(200).json(response);
       } catch (error) {
         if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
         if (error instanceof NotFound) return res.status(404).json({ message: error.message });
