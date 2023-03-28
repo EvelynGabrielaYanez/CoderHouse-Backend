@@ -33,12 +33,17 @@ body {
   justify-content: space-between;
 }
 
-#btnCart{
+.buttonHeader button{
   background-color:transparent;
   border: none;
 }
-#btnCart:hover{
+.buttonHeader button {
   cursor: pointer;
+}
+
+.buttonHeader {
+  display: flex;
+  align-content: center;
 }
 
 table {

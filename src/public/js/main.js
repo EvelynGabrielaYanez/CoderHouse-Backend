@@ -72,6 +72,10 @@ function goToCart() {
 }
 
 function goToProduct() {
-  console.log("entra");
   window.location.assign(`${window.location.origin}/products`);
+}
+
+async function logOut() {
+  await fetch(`${window.location.origin}/api/session/logout`);
+  window.location.assign(`${window.location.origin}/login`);
 }

@@ -11,7 +11,8 @@ export default class SessionManager {
     if (!user || !compareHash(password, user.password)) throw new BadRequest('Usuario o contraseña invalidos');
     return user;
  }
- static async logout (session) {
+
+  static async logout (session) {
     if(!session || !session.login) throw new InvalidParams('no se resivio una sesion');
     session.destroy();
   }
