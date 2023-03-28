@@ -1,4 +1,11 @@
-<h1 class='title'>Lista de productos</h2>
+<div class="top-container">
+  <h1>Bienvenido {{userData.firstName}}{{userData.lastName}}</h1>
+</div>
+<div class="header" id="myHeader">
+  <h1>Listado de productos</h1>
+  <button id="btnCart" onClick="goToCart()"><i class="fa fa-shopping-cart" style="font-size:20px;color:black;"></i></button>
+</div>
+
 <div id='products'>
   {{> table/table data=data abm=true add='addProduct' delete='deleteProduct'}}
   <div class="paginationBox">

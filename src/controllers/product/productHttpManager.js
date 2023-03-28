@@ -79,9 +79,3 @@ export default class ProductHttpManager {
     }
   }
 }
-
-const createPrevLink = (pathname,params) => {
-  return `http://localhost:${process.env.PORT || 8080}${pathname}?${Object.entries(params).reduce(([paramName, paramValue])=> {
-
-  },[]).join()}`;
-}
