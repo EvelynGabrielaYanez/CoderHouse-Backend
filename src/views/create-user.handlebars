@@ -1,16 +1,16 @@
-<form id="formLogin" submit="createUser()">
+<form id="formLogin" onsubmit="createUser(event)">
   <h2 class="formTitle">{{title}}</h2>
   <div class="InputBox">
     <label for="inputName" class="lblInput">Nombre</label>
-    <input type="text" id="inputName" class="formInput" placeholder="Nombre" name="inputEmail" required autofocus>
+    <input type="text" id="inputName" class="formInput" placeholder="Nombre" name="inputName" required autofocus>
   </div>
   <div class="InputBox">
-    <label for="inputName" class="lblInput">Apellido</label>
-    <input type="text" id="inputName" class="formInput" placeholder="Apellido" name="inputEmail" required autofocus>
+    <label for="inputLastName" class="lblInput">Apellido</label>
+    <input type="text" id="inputLastName" class="formInput" placeholder="Apellido" name="inputLastName" required autofocus>
   </div>
   <div class="InputBox">
-    <label for="inputEdad" class="lblInput">Edad</label>
-    <input type="number" id="inputEdad" class="formInput" placeholder="Edad" name="inputEmail" required autofocus>
+    <label for="inputAge" class="lblInput">Edad</label>
+    <input type="number" id="inputAge" class="formInput" placeholder="Edad" name="inputAge" required autofocus>
   </div>
   <div class="InputBox">
     <label for="inputEmail" class="lblInput">Usuario</label>
@@ -18,7 +18,7 @@
   </div>
   <div class="InputBox">
     <label for="inputPassword" class="lblInput">Contraseña</label>
-    <input type="password" id="inputPassword" class="formInput" placeholder="Password" name="inputPassword" required>
+    <input type="password" id="inputPassword" class="formInput" placeholder="Password" name="inputPassword" required autofocus>
   </div>
   <div class="InputBox">
     <button id="btnLogin" type="submit">Crear Usuario</button>

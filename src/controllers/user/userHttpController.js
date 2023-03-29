@@ -17,8 +17,9 @@ export default class UserHttpManager {
       const response = await UserManager.create({ firstName, lastName, email, age, role, password });
       res.status(200).json(response);
     } catch (error) {
+      console.log(error.stack);
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      if (error instanceof NotFound) return res.status(400).json({ message: error.message });
+      if (error instanceof NotFound) return res.status(404).json({ message: error.message });
       res.status(500).json({ message: error.message, stack: error.stack} );
     }
  }
