@@ -51,7 +51,7 @@ async function login(e) {
   e.preventDefault();
   const emailInput = document.getElementById('inputEmail');
   const passwordInput = document.getElementById('inputPassword');
-  const response = await fetch(`${window.location.origin}/api/passport/login`, {
+  const response = await fetch(`${window.location.origin}/api/session/login`, {
     method: 'POST',
     body: JSON.stringify({
       email: emailInput.value,
