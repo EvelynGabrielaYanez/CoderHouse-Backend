@@ -7,15 +7,7 @@ import UserManager from "./userController.js";
 export default class UserHttpManager {
   static async create (req, res) {
     try {
-      const { firstName, lastName, email, age, role , password } = req.body;
-      if(typeof firstName !== 'string') throw new BadRequest('Parametros invalidos');
-      if(typeof lastName !== 'string') throw new BadRequest('Parametros invalidos');
-      if(typeof email !== 'string') throw new BadRequest('Parametros invalidos');
-      if(typeof password !== 'string') throw new BadRequest('Parametros invalidos');
-      if(role && typeof role !== 'string') throw new BadRequest('Parametros invalidos');
-      if(isNaN(age)) throw new BadRequest('Parametros invalidos');
-      const response = await UserManager.create({ firstName, lastName, email, age, role, password });
-      res.status(200).json(response);
+      res.status(200).json({ status: 'success', user: req.user, message: 'Usuario creado con éxito'});
     } catch (error) {
       console.log(error.stack);
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });

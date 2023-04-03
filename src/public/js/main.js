@@ -51,7 +51,7 @@ async function login(e) {
   e.preventDefault();
   const emailInput = document.getElementById('inputEmail');
   const passwordInput = document.getElementById('inputPassword');
-  const response = await fetch(`${window.location.origin}/api/session/login`, {
+  const response = await fetch(`${window.location.origin}/api/passport/login`, {
     method: 'POST',
     body: JSON.stringify({
       email: emailInput.value,
@@ -112,4 +112,9 @@ async function createUser(e) {
   else if (!response.ok || response.status !== 200) alert('Datos invalidos');
   else  window.location.assign(`${window.location.origin}/login`);
   return false;
+}
+
+async function gitHubSession () {
+  console.log('entra');
+  window.location.assign(`http://localhost:8080/authSession/github`);
 }

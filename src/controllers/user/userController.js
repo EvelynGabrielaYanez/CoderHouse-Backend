@@ -15,4 +15,7 @@ export default class UserManager {
  static async getUser(email) {
   return await User.findOne({ email }).exec();
  }
+ static async findById(id) {
+   return await User.findById(id).exec();
+ }
 }

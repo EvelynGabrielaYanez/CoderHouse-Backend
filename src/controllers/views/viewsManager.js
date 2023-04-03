@@ -7,7 +7,7 @@ export default class ViewManager {
   }
 
   static login(req, res) {
-    if (req.session.login)
+    if (req.session.user)
       res.redirect(`${req.protocol}://${req.get('host') }/products`);
     else
       res.render('login', {
@@ -17,7 +17,7 @@ export default class ViewManager {
   }
 
   static async products (req,res) {
-    if(!req.session.login)
+    if(!req.session.user)
       return res.redirect(`${req.protocol}://${req.get('host') }/login`);
     const page = req.query?.page ? parseInt(req.query?.page) : 1;
     const productManager = new ProductManager();
@@ -30,14 +30,14 @@ export default class ViewManager {
       },
       paginateData: {...paginateData, nextLink, prevLink, pagination: ProductManager.calculatePaginationLink(req, 1, paginateData.totalPages)},
       userData: {
-        firstName: req.session.firstName,
-        lastName: req.session.lastName
+        firstName: req.session.user.firstName,
+        lastName: req.session.user.lastName
       }
     });
   }
 
   static createUser (req, res ) {
-    if (req.session.login)
+    if (req.session.user)
       res.redirect(`${req.protocol}://${req.get('host') }/products`);
     else
       res.render('create-user', {
@@ -47,7 +47,7 @@ export default class ViewManager {
   }
 
   static async cart (req,res) {
-    if(!req.session.login)
+    if(!req.session.user)
       return res.redirect(`${req.protocol}://${req.get('host') }/login`);
     const { cid } = req.params;
     const cartManager = new CartsManager();

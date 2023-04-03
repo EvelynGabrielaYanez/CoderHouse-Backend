@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
  * @returns {String}
  */
 export const createHash = (stringToHash) => {
+  console.log(process.env.SALT);
   return bcrypt.hashSync(stringToHash, bcrypt.genSaltSync(parseInt(process.env.SALT)))
 };
 

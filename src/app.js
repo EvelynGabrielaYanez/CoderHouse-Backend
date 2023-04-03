@@ -7,6 +7,8 @@ import { create } from 'express-handlebars';
 import router from './routes/index.routes.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import passport from 'passport';
+import initializePassport from './configuration/passport.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -48,6 +50,9 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine('handlebars', Handlebars.engine);
 app.set('view engine', 'handlebars');
