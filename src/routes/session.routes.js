@@ -11,5 +11,6 @@ routerSession.get('/failLogin', async (req, res) => {
 });
 
 routerSession.get("/logout", SessionHttpManager.logout);
+routerSession.get("/current", SessionHttpManager.getCurrent);
 
 export default routerSession;

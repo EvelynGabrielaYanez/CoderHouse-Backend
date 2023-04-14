@@ -18,6 +18,11 @@ const userSchema = new Schema({
       type: Number,
       required: true
   },
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'carts',
+    require: true
+  },
   role: {
       type: String,
       default: "User"
@@ -27,6 +32,11 @@ const userSchema = new Schema({
       required: true
   }
 });
+
+userSchema.pre('find', function() {
+  this.populate('cart');
+});
+
 const User = mongoose.model('user', userSchema);
 
 export default User;

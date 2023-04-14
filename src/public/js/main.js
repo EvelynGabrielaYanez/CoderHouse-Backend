@@ -1,4 +1,19 @@
-const temporalCartId = '641c86bbf19d1b4526665ddd';
+let CART_ID = null;
+
+function setCartId (value) {
+  console.log("test", value);
+  CART_ID = value ?? null;
+}
+
+async function getCartId() {
+  console.log(CART_ID);
+  if (CART_ID) return CART_ID;
+  const response = await fetch(`${window.location.origin}/api/session/current`);
+  const user = await response.json();
+  console.log(user);
+  setCartId(user.cart._id);
+  return CART_ID;
+}
 
 // Agrega eventos
 const addAllDeleteEvent = () => {
@@ -22,7 +37,7 @@ const addAddEvent = deleteButton => {
  */
 async function addCartProduct(event) {
   const productID = event.target.parentNode.parentNode.id;
-  const response = await fetch(`${window.location.origin}/api/carts/${temporalCartId}/product/${productID}`, { method: 'POST' });
+  const response = await fetch(`${window.location.origin}/api/carts/${await getCartId()}/product/${productID}`, { method: 'POST' });
   const message = !response.ok || response.status !== 200 ? 'Ocurrio un error al intentar eliminar' : 'Producto agregado al carrito con èxito';
   alert(message);
 }
@@ -33,7 +48,7 @@ async function addCartProduct(event) {
  */
 async function deleteCartProduct(event) {
   const productID = event.target.parentNode.parentNode.id;
-  let response = await fetch(`${window.location.origin}/api/carts/${temporalCartId}/product/${productID}`, { method: 'DELETE' });
+  let response = await fetch(`${window.location.origin}/api/carts/${await getCartId()}/product/${productID}`, { method: 'DELETE' });
   const message = !response.ok || response.status !== 200 ? 'Ocurrio un error al intentar eliminar' : 'Producto eliminado del carrito con èxito';
   alert(message);
 }
@@ -61,14 +76,15 @@ async function login(e) {
       'Content-Type': 'application/json'
     }
   });
-  console.log(response);
   if (!response.ok || response.status !== 200) alert('Usuario o contraseña invalidos');
   else  window.location.assign(`${window.location.origin}/products`);
+  const { userData } = await response.json();
+  setCartId(userData.cartId);
   return false;
 }
 
-function goToCart() {
-  window.location.assign(`${window.location.origin}/cart/${temporalCartId}`);
+async function goToCart() {
+  window.location.assign(`${window.location.origin}/cart/${await getCartId()}`);
 }
 
 function goToProduct() {
@@ -77,6 +93,7 @@ function goToProduct() {
 
 async function logOut() {
   await fetch(`${window.location.origin}/api/session/logout`);
+  setCartId(null);
   window.location.assign(`${window.location.origin}/login`);
 }
 

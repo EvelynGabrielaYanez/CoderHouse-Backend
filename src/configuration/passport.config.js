@@ -6,6 +6,7 @@ import UserManager from '../controllers/user/userController.js';
 import { BadRequest } from '../utils/error.js';
 import { createHash } from '../utils/bcrypt.js';
 import User from '../dao/models/user.js';
+import CartsManager from '../controllers/carts/cartsManager.js';
 
 const LocalStrategy = local.Strategy;
 
@@ -33,15 +34,16 @@ const initializePassport = () => {
     callbackURL: 'http://localhost:8080/authSession/githubSession',
     passReqToCallback: true
   }, async (req, accessToken, refreshToken, profile, done) => {
-
     try {
       const user = await UserManager.getUser(profile._json.id);
       if (user) return done(null, user);
+      const cart = await (new CartsManager()).save();
       const userCreated = await User.create({
         email: profile._json.id,
         firstName: profile._json.name,
         lastName: ' ',
         age:0,
+        cart,
         password: createHash('gitHubUser')
       });
       return done(null, userCreated);

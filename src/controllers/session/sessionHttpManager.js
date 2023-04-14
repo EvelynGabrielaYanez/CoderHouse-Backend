@@ -8,17 +8,19 @@ export default class SessionHttpManager {
   static async login (req, res) {
     try {
       if (!req.user) throw new Unauthorized('Credenciales invalidas');
-      const { email, firstName, lastName, age } = req.user;
+      const { email, firstName, lastName, age, cart } = req.user;
       req.session.user = {
         firstName,
         lastName,
         email,
-        age
+        age,
+        cart
       };
       res.status(200).json({
         userData: {
           firstName: req.user.firstName,
-          lastName: req.user.lastName
+          lastName: req.user.lastName,
+          cartId: req.user.cart._id
         }
       });
     } catch (error) {
@@ -26,9 +28,9 @@ export default class SessionHttpManager {
       if (error instanceof Unauthorized) return res.status(401).json({ status: "error", error: error.message })
       console.log("BR",error instanceof BadRequest);
       console.log("NF",error instanceof NotFound);
-      if (error instanceof BadRequest) return res.status(400).json({ message: 'Usuario o contraseña invalidos' });
-      if (error instanceof NotFound) return res.status(400).json({ message: 'Usuario o contraseña invalidos' });
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      if (error instanceof BadRequest) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
+      if (error instanceof NotFound) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
+      res.status(500).json({ message: error.message, stack: error.stack, status: 'error'} );
     }
  }
 
@@ -40,7 +42,7 @@ export default class SessionHttpManager {
       res.redirect('/login');
     } catch (error) {
       console.error({ message: error.message, stack: error.stack});
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
+      if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
       res.status(500).json({ message: error.message, stack: error.stack} );
     }
   }
@@ -48,5 +50,15 @@ export default class SessionHttpManager {
   static githubLogin (req, res) {
     req.session.user = res.user;
     res.redirect('/');
+  }
+
+  static getCurrent(req, res) {
+    try {
+      if (!req.session.user) throw new BadRequest();
+      res.status(200).json(req.session.user);
+    } catch (error) {
+      if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
+      res.status(500).json({ message: error.message, stack: error.stack, status: 'error'} );
+    }
   }
 }
