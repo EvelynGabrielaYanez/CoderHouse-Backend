@@ -26,8 +26,6 @@ export default class SessionHttpManager {
     } catch (error) {
       console.error({ message: error.message, stack: error.stack});
       if (error instanceof Unauthorized) return res.status(401).json({ status: "error", error: error.message })
-      console.log("BR",error instanceof BadRequest);
-      console.log("NF",error instanceof NotFound);
       if (error instanceof BadRequest) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
       if (error instanceof NotFound) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
       res.status(500).json({ message: error.message, stack: error.stack, status: 'error'} );
@@ -54,7 +52,7 @@ export default class SessionHttpManager {
 
   static getCurrent(req, res) {
     try {
-      if (!req.session.user) throw new BadRequest();
+      if (!req.session?.user) throw new BadRequest('No hay ninguna sesión');
       res.status(200).json(req.session.user);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
