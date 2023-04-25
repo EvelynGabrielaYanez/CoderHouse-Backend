@@ -5,8 +5,9 @@
   "description": "Primera entrega - Evelyn Yañez",
   "main": "app.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start:prod": "set NODE_ENV=production&& node src/app.js",
+    "start:dev": "set NODE_ENV=development&& node src/app.js",
+    "dev": "set NODE_ENV=development&& nodemon src/app.js"
   },
   "author": "Yañez Evelyn Gabriela",
   "license": "ISC",

@@ -1,16 +1,13 @@
 let CART_ID = null;
 
 function setCartId (value) {
-  console.log("test", value);
   CART_ID = value ?? null;
 }
 
 async function getCartId() {
-  console.log(CART_ID);
   if (CART_ID) return CART_ID;
   const response = await fetch(`${window.location.origin}/api/session/current`);
   const user = await response.json();
-  console.log(user);
   setCartId(user.cart._id);
   return CART_ID;
 }
@@ -104,14 +101,6 @@ async function createUser(e) {
   const emailElement = document.getElementById('inputEmail');
   const ageElement = document.getElementById('inputAge');
   const passwordElement = document.getElementById('inputPassword');
-  console.log({
-    firstName: firstNameElement.value,
-    lastName: lastNameElement.value,
-    email: emailElement.value,
-    age: ageElement.value,
-    password: passwordElement.value
-  });
-
   const response = await fetch(`${window.location.origin}/api/user`, {
     method: 'POST',
     body: JSON.stringify({
@@ -132,6 +121,5 @@ async function createUser(e) {
 }
 
 async function gitHubSession () {
-  console.log('entra');
   window.location.assign(`http://localhost:8080/authSession/github`);
 }

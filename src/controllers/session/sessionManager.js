@@ -8,7 +8,6 @@ import UserManager from "../user/userController.js";
 export default class SessionManager {
   static async login ({ email, password }) {
     const user = await UserManager.getUser(email);
-    console.log(user, email);
     if (!user || !compareHash(password, user.password)) throw new BadRequest('Usuario o contraseña invalidos');
     return user;
  }

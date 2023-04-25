@@ -1,5 +1,5 @@
 import express from 'express';
-import * as dotEnv from 'dotenv';
+import env from './configuration/config.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
@@ -13,8 +13,6 @@ import initializePassport from './configuration/passport.config.js';
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-dotEnv.config();
-
 const Handlebars = create({
   helpers: {
     'ifNotEq': function(v1, v2, options) {
@@ -27,26 +25,23 @@ const Handlebars = create({
 });
 
 const app = express();
-mongoose.connect(process.env.DB_URL)
+mongoose.connect(env.dbUrl)
   .then(() => console.log('Conexión a la base realizada con éxito'))
   .catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
-// Se define el puerto
-const port = process.env.PORT || "8080";
-
 // Se inicia la escucha del servidor
-const server = app.listen(port, () => console.log(`Server escuchando en el puerto ${port}`))
+const server = app.listen(env.port, () => console.log(`Server escuchando en el puerto ${env.port}`))
 
 // Se definen los middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
   store: MongoStore.create({
-      mongoUrl: process.env.DB_URL,
+      mongoUrl: env.dbUrl,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
       ttl: 210
   }),
-  secret: process.env.SESSION_SECRET,
+  secret: env.sessionSecret,
   resave: true,
   saveUninitialized: true
 }));

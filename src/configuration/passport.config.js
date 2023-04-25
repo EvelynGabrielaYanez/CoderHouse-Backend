@@ -7,6 +7,7 @@ import { BadRequest } from '../utils/error.js';
 import { createHash } from '../utils/bcrypt.js';
 import User from '../dao/models/user.js';
 import CartsManager from '../controllers/carts/cartsManager.js';
+import env  from '../configuration/config.js';
 
 const LocalStrategy = local.Strategy;
 
@@ -29,8 +30,8 @@ const initializePassport = () => {
   ));
 
   passport.use('github', new GitHubStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientID: env.clientId,
+    clientSecret: env.clientSecret,
     callbackURL: 'http://localhost:8080/authSession/githubSession',
     passReqToCallback: true
   }, async (req, accessToken, refreshToken, profile, done) => {
@@ -54,7 +55,6 @@ const initializePassport = () => {
   }))
 
   passport.serializeUser((user, done) => {
-    console.log(user);
     if (Array.isArray(user)) return done(null, user[0]._id);
     done(null, user._id);
   });
@@ -66,7 +66,6 @@ const initializePassport = () => {
 
   passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
     try {
-      console.log(email, password);
       const user = await SessionManager.login({ email, password });
       return done(null, user);
     } catch (error) {

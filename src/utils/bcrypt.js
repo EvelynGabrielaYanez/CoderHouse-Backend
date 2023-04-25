@@ -1,4 +1,5 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+import env from '../configuration/config.js';
 
 /**
  * Función encargada de hashear una cadena de caracteres
@@ -6,8 +7,7 @@ import bcrypt from 'bcrypt'
  * @returns {String}
  */
 export const createHash = (stringToHash) => {
-  console.log(process.env.SALT);
-  return bcrypt.hashSync(stringToHash, bcrypt.genSaltSync(parseInt(process.env.SALT)))
+  return bcrypt.hashSync(stringToHash, bcrypt.genSaltSync(parseInt(env.salt)))
 };
 
 /**
