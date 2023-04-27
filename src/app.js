@@ -30,8 +30,7 @@ mongoose.connect(env.dbUrl)
   .catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
 // Se inicia la escucha del servidor
-const server = app.listen(env.port, () => console.log(`Server escuchando en el puerto ${env.port}`))
-
+const server = app.listen(env.port, () => console.log(`Server escuchando en el puerto ${env.port}`));
 // Se definen los middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

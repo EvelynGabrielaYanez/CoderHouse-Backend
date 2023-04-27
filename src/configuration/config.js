@@ -8,7 +8,7 @@ export default {
   port: process.env.PORT ?? '8080',
   dbSelection: process.env.DB_SELECTION,
   dbUrl: process.env.DB_URL,
-  dbSessionSecret: process.env.SESSION_SECRET,
+  sessionSecret: process.env.SESSION_SECRET,
   salt: process.env.SALT,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET
