@@ -7,7 +7,8 @@ export default class ViewManager {
   }
 
   static login(req, res) {
-    if (req.session.user)
+    console.log("resquest pant log", req.cookies);
+    if (req.user)
       res.redirect(`${req.protocol}://${req.get('host') }/products`);
     else
       res.render('login', {
@@ -17,7 +18,9 @@ export default class ViewManager {
   }
 
   static async products (req,res) {
-    if(!req.session.user)
+
+    console.log(req.user)
+    if(!req.cookies.token.jwt)
       return res.redirect(`${req.protocol}://${req.get('host') }/login`);
     const page = req.query?.page ? parseInt(req.query?.page) : 1;
     const productManager = new ProductManager();

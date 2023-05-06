@@ -73,10 +73,15 @@ async function login(e) {
       'Content-Type': 'application/json'
     }
   });
-  if (!response.ok || response.status !== 200) alert('Usuario o contraseña invalidos');
-  else  window.location.assign(`${window.location.origin}/products`);
-  const { userData } = await response.json();
+  if (!response.ok || response.status !== 200) {
+    alert('Usuario o contraseña invalidos')
+    return false;
+  }
+  const { userData, token } = await response.json();
+  console.log(token);
+  document.cookie = `token=${token};expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/`;
   setCartId(userData.cartId);
+  window.location.assign(`${window.location.origin}/products`);
   return false;
 }
 

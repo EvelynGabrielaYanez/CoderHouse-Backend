@@ -1,3 +1,4 @@
+import passport from "passport";
 import { BadRequest, NotFound, Unauthorized } from "../../utils/error.js";
 import SessionManager from "./sessionManager.js";
 
@@ -5,24 +6,16 @@ import SessionManager from "./sessionManager.js";
  * Clase encargada de manejar la captura de errores, validar
  */
 export default class SessionHttpManager {
-  static async login (req, res) {
+  static async login (req, res, next) {
     try {
-      if (!req.user) throw new Unauthorized('Credenciales invalidas');
-      const { email, firstName, lastName, age, cart } = req.user;
-      req.session.user = {
-        firstName,
-        lastName,
-        email,
-        age,
-        cart
-      };
-      res.status(200).json({
-        userData: {
-          firstName: req.user.firstName,
-          lastName: req.user.lastName,
-          cartId: req.user.cart._id
-        }
-      });
+      passport.authenticate('jwt', { session: false }, async (err, user, info) => {
+        if (err) throw new Unauthorized("Error en consulta de token");
+        const { email, password } = req.body;
+        const response = await SessionManager.login({ email, password, user });
+        if (response.token) res.cookie('jwt', response.token, { httpOnly: true });
+        else req.user = user;
+        res.status(200).json(response);
+      })(req, res, next);
     } catch (error) {
       console.error({ message: error.message, stack: error.stack});
       if (error instanceof Unauthorized) return res.status(401).json({ status: "error", error: error.message })

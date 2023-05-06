@@ -1,78 +1,10 @@
 import passport from 'passport';
-import local from 'passport-local';
-import GitHubStrategy from 'passport-github2';
-import SessionManager from '../controllers/session/sessionManager.js';
-import UserManager from '../controllers/user/userController.js';
-import { BadRequest } from '../utils/error.js';
-import { createHash } from '../utils/bcrypt.js';
-import User from '../dao/models/user.js';
-import CartsManager from '../controllers/carts/cartsManager.js';
-import env  from '../configuration/config.js';
-
-const LocalStrategy = local.Strategy;
+import { gitHubStrategy } from './strategies/gitHub.strategy.js';
+import { jwtStrategy } from './strategies/jwt.strategy.js';
 
 const initializePassport = () => {
-  passport.use('register', new LocalStrategy(
-    { passReqToCallback: true, usernameField:'email' }, async (req, username, password, done) => {
-      const { firstName, lastName, email, age } = req.body;
-      try {
-        const user = await UserManager.getUser(username);
-        if (user) {
-          console.log('El usuario ya existe');
-          return done (null, false);
-        }
-        const newUser = await UserManager.create({ firstName, lastName, email, age, password });
-        return done(null, newUser);
-      } catch (error) {
-        return done(`Error al obtener el usuario message: ${error.message} stoack: ${error.stack}`);
-      }
-    }
-  ));
-
-  passport.use('github', new GitHubStrategy({
-    clientID: env.clientId,
-    clientSecret: env.clientSecret,
-    callbackURL: 'http://localhost:8080/authSession/githubSession',
-    passReqToCallback: true
-  }, async (req, accessToken, refreshToken, profile, done) => {
-    try {
-      const user = await UserManager.getUser(profile._json.id);
-      if (user) return done(null, user);
-      const cart = await (new CartsManager()).save();
-      const userCreated = await User.create({
-        email: profile._json.id,
-        firstName: profile._json.name,
-        lastName: ' ',
-        age:0,
-        cart,
-        password: createHash('gitHubUser')
-      });
-      return done(null, userCreated);
-    } catch (error) {
-      console.error(error.stack);
-      return done(error);
-    }
-  }))
-
-  passport.serializeUser((user, done) => {
-    if (Array.isArray(user)) return done(null, user[0]._id);
-    done(null, user._id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    const user = await UserManager.findById(id);
-    done(null, user);
-  });
-
-  passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-    try {
-      const user = await SessionManager.login({ email, password });
-      return done(null, user);
-    } catch (error) {
-      if (error instanceof BadRequest) done(null, false)
-      return done(error);
-    }
-  }))
+  passport.use(jwtStrategy);
+  passport.use('github', gitHubStrategy);
 }
 
 export default initializePassport;
