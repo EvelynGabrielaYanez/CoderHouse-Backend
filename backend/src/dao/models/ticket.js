@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const ticketSchema = new Schema({
-  code: String,
   amount: Number,
   purchaser: String
 },
