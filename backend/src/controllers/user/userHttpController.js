@@ -7,8 +7,8 @@ import UserManager from "./userController.js";
 export default class UserHttpManager {
   static async create (req, res) {
     try {
-      const { firstName, lastName, email, age } = req.body;
-      const { token, user } = await UserManager.register({ firstName, lastName, email, age });
+      const { firstName, lastName, email, age, password } = req.body;
+      const { token, user } = await UserManager.register({ firstName, lastName, email, age, password });
       res.cookie('jwt', token, { httpOnly: true });
       res.status(200).json({ status: 'success', user, token, message: 'Usuario creado con éxito'});
     } catch (error) {

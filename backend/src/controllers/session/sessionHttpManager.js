@@ -11,7 +11,8 @@ export default class SessionHttpManager {
       passport.authenticate('jwt', { session: false }, async (err, user, info) => {
         if (err) throw new Unauthorized("Error en consulta de token");
         const { email, password } = req.body;
-        const response = await SessionManager.login({ email, password, user });
+        const token = req.cookies?.jwt;
+        const response = await SessionManager.login({ email, password, user, token });
         if (response.token) res.cookie('jwt', response.token, { httpOnly: true });
         else req.user = user;
         res.status(200).json(response);
@@ -45,8 +46,8 @@ export default class SessionHttpManager {
 
   static getCurrent(req, res) {
     try {
-      if (!req.session?.user) throw new BadRequest('No hay ninguna sesión');
-      res.status(200).json(req.session.user);
+      if (!req?.user) throw new BadRequest('No hay ninguna sesión');
+      res.status(200).json(req?.user);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
       res.status(500).json({ message: error.message, stack: error.stack, status: 'error'} );

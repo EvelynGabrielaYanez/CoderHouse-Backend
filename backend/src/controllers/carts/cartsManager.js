@@ -1,6 +1,8 @@
 
 import { InvalidParams, NotFound } from "../../utils/error.js";
 import Carts from "../../dao/models/carts.js";
+import TicketManager from "../ticket/ticketManager.js";
+import Product from "../../dao/models/product.js";
 
 export default class CartsManager {
   /**
@@ -94,6 +96,24 @@ export default class CartsManager {
       }
     }).exec();
     return result;
+  }
+
+  async getProductsStockDetail (products) {
+    return products.reduce(async ( accum ,{ product, quantity}) => {
+      const { productsWithoutStock, productsWithSock } = await accum;
+      const instanceProduct = new Product(product);
+      const { error } = await instanceProduct.removeProducts(quantity) ?? {};
+      if(error) productsWithoutStock.push(instanceProduct._id);
+      else productsWithSock.push(instanceProduct);
+      return { productsWithoutStock, productsWithSock };
+    }, Promise.resolve({ productsWithoutStock: [], productsWithSock: []}))
+  }
+
+  async purchase (cid) {
+    const cart = await this.getCartById(cid);
+    const { productsWithoutStock, productsWithSock } = await this.getProductsStockDetail(cart.products);
+    const ticket = await TicketManager.create(productsWithSock);
+    return { ticket, productsWithoutStock }
   }
 
 }

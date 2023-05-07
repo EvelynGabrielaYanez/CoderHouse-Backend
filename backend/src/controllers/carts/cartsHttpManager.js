@@ -121,9 +121,9 @@ export default class CartsHttpManager {
 
   /**
    * Mètodo encargado de borrar todos los productos de un carrito
-   * @param {*} req 
-   * @param {*} res 
-   * @returns 
+   * @param {*} req
+   * @param {*} res
+   * @returns
    */
   static async deleteProducts (req, res) {
     try {
@@ -140,6 +140,18 @@ export default class CartsHttpManager {
   static async getCarts(req, res) {
     try {
       const response = await (new CartsManager().getCarts());
+      res.status(200).json(response);
+    } catch (error) {
+      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
+      if (error instanceof NotFound) return res.status(404).json({ message: error.message });
+      res.status(500).json({ message: error.message, stack: error.stack} );
+    }
+  }
+
+  static async purchase(req, res) {
+    try {
+      const cid = req.params.cid;
+      const response = await (new CartsManager().purchase(cid));
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });

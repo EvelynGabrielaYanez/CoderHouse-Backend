@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import ProductHttpManager from '../controllers/product/productHttpManager.js';
+import { current } from '../utils/jwt.js';
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -21,8 +22,8 @@ productRouter.get('/', ProductHttpManager.getProducts);
 
 productRouter.get('/:pid', ProductHttpManager.getProductsById);
 
-productRouter.put('/:pid', upload.array('thumbnails'), ProductHttpManager.updateProduct);
+productRouter.put('/:pid', upload.array('thumbnails'), current(['Admin']), ProductHttpManager.updateProduct);
 
-productRouter.delete('/:pid', ProductHttpManager.deleteProduct);
+productRouter.delete('/:pid', current(['Admin']), ProductHttpManager.deleteProduct);
 
 export default productRouter;

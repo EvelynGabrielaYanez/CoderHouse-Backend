@@ -24,7 +24,7 @@ export default class UserManager {
   }
 
   static async register({ email, firstName, lastName, age, password }) {
-    const user = await UserManager.getUser(username);
+    const user = await UserManager.getUser(email);
     if (user) {
       console.log('El usuario ya existe');
       throw new BadRequest('El usuario ya se encuentra registardo');

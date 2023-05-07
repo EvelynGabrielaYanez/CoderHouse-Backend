@@ -9,22 +9,22 @@ import router from './routes/index.routes.js';
 import passport from 'passport';
 import initializePassport from './configuration/passport.config.js';
 import cors from 'cors';
+import { authVerification } from './utils/jwt.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-// const whiteList = ['http://localhost:3000'] //Rutas validas a mi servidor
+const whiteList = ['http://localhost:3000'] //Rutas validas a mi servidor
 
-// const corsOptions = { //Reviso si el cliente que intenta ingresar a mi servidor esta o no en esta lista
-//     origin: (origin, callback) => {
-//         if (whiteList.indexOf(origin) !== -1) {
-//             callback(null, true)
-//         } else {
-//             callback(new Error('Not allowed by Cors'))
-//         }
-//     }
-// }
-
+const corsOptions = { //Reviso si el cliente que intenta ingresar a mi servidor esta o no en esta lista
+    origin: (origin, callback) => {
+        if (whiteList.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by Cors'))
+        }
+    }
+}
 
 const Handlebars = create({
   helpers: {
@@ -40,7 +40,8 @@ const Handlebars = create({
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(authVerification('jwt'));
 
 mongoose.connect(env.dbUrl, {
     useNewUrlParser: true,
@@ -53,7 +54,6 @@ mongoose.connect(env.dbUrl, {
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(passport.initialize());
 initializePassport();
-
 app.engine('handlebars', Handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.resolve(__dirname, './views'));
