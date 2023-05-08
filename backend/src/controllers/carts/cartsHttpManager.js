@@ -1,7 +1,7 @@
 
-import CartsManager from './cartsManager.js';
+import CartsManager from '../../service/carts/cartsManager.js';
 import { BadRequest, NotFound } from "../../utils/error.js";
-import ProductManager from '../product/productManager.js';
+import ProductManager from '../../service/product/productManager.js';
 /**
  * Clase encargada de manejar la captura de errores, validar
  */
@@ -151,7 +151,8 @@ export default class CartsHttpManager {
   static async purchase(req, res) {
     try {
       const cid = req.params.cid;
-      const response = await (new CartsManager().purchase(cid));
+      const { user } = req;
+      const response = await (new CartsManager().purchase(cid, user.email));
       res.status(200).json(response);
     } catch (error) {
       if (error instanceof BadRequest) return res.status(400).json({ message: error.message });

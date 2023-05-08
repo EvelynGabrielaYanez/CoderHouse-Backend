@@ -7,7 +7,6 @@ import env from '../configuration/config.js';
  * @returns {String}
  */
 export const createHash = (stringToHash) => {
-  console.log(stringToHash);
   return bcrypt.hashSync(stringToHash, bcrypt.genSaltSync(parseInt(env.salt)))
 };
 

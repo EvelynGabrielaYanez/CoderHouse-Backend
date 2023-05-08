@@ -1,5 +1,5 @@
-import CartsManager from "../carts/cartsManager.js";
-import ProductManager from "../product/productManager.js";
+import CartsManager from "../../service/carts/cartsManager.js";
+import ProductManager from "../../service/product/productManager.js";
 
 export default class ViewManager {
   static home(req, res) {

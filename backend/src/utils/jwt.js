@@ -3,7 +3,6 @@ import passport from "passport";
 import { Unauthorized } from "./error.js";
 
 export const generateToken = (user) => {
-  console.log(process.env.JWT_SECRET);
   return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' });
 }
 
@@ -23,7 +22,6 @@ export const current = (roles) => {
   return async (req, res, next) => {
     try {
       const userToValidate = req.user;
-      console.log(userToValidate);
       if(!userToValidate || !roles.includes(userToValidate.role)) throw new Unauthorized('Usuario no autorizado');
       next()
     } catch (error) {

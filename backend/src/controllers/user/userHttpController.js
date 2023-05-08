@@ -1,5 +1,5 @@
 import { BadRequest, NotFound } from "../../utils/error.js";
-import UserManager from "./userController.js";
+import UserManager from "../../service/user/userManager.js";
 
 /**
  * Clase encargada de manejar la captura de errores, validar

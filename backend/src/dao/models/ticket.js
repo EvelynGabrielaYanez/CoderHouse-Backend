@@ -5,7 +5,8 @@ const ticketSchema = new Schema({
   purchaser: String
 },
 {
-  createdAt: 'purchase_datetime'
+  timestamps: { createdAt: 'purchaseDatetime', updatedAt: false },
+  versionKey: false
 });
 
 const Ticket = mongoose.model('ticket', ticketSchema);

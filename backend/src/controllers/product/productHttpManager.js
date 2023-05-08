@@ -1,4 +1,4 @@
-import ProductManager from './productManager.js';
+import ProductManager from '../../service/product/productManager.js';
 import { BadRequest, NotFound } from "../../utils/error.js";
 
 /**

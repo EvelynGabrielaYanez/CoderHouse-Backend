@@ -26,12 +26,10 @@ export default class UserManager {
   static async register({ email, firstName, lastName, age, password }) {
     const user = await UserManager.getUser(email);
     if (user) {
-      console.log('El usuario ya existe');
       throw new BadRequest('El usuario ya se encuentra registardo');
     }
     const newUser = await UserManager.create({ firstName, lastName, email, age, password });
     const token = generateToken(newUser);
-    console.log(`Se le genero el token al usuario ${token}`);
     return { user: newUser, token};
   }
 }

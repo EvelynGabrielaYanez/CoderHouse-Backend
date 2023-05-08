@@ -1,9 +1,9 @@
 
-import UserManager from '../../controllers/user/userController.js';
+import UserManager from '../../service/user/userManager.js';
 import GitHubStrategy from 'passport-github2';
 import User from '../../dao/models/user.js';
 import { createHash } from '../../utils/bcrypt.js';
-import CartsManager from '../../controllers/carts/cartsManager.js';
+import CartsManager from '../../service/carts/cartsManager.js';
 import env  from '../../configuration/config.js';
 
 export const gitHubStrategy = new GitHubStrategy({

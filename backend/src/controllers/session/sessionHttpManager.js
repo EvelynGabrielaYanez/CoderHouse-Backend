@@ -1,6 +1,6 @@
 import passport from "passport";
 import { BadRequest, NotFound, Unauthorized } from "../../utils/error.js";
-import SessionManager from "./sessionManager.js";
+import SessionManager from "../../service/session/sessionManager.js";
 
 /**
  * Clase encargada de manejar la captura de errores, validar

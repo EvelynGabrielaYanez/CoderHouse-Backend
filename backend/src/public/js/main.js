@@ -78,7 +78,6 @@ async function login(e) {
     return false;
   }
   const { userData, token } = await response.json();
-  console.log(token);
   document.cookie = `token=${token};expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/`;
   setCartId(userData.cartId);
   window.location.assign(`${window.location.origin}/products`);

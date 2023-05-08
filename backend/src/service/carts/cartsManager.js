@@ -1,8 +1,8 @@
 
 import { InvalidParams, NotFound } from "../../utils/error.js";
 import Carts from "../../dao/models/carts.js";
-import TicketManager from "../ticket/ticketManager.js";
 import Product from "../../dao/models/product.js";
+import TicketManager from "../ticket/ticketManager.js";
 
 export default class CartsManager {
   /**
@@ -109,11 +109,10 @@ export default class CartsManager {
     }, Promise.resolve({ productsWithoutStock: [], productsWithSock: []}))
   }
 
-  async purchase (cid) {
+  async purchase (cid, purchaser) {
     const cart = await this.getCartById(cid);
     const { productsWithoutStock, productsWithSock } = await this.getProductsStockDetail(cart.products);
-    const ticket = await TicketManager.create(productsWithSock);
+    const ticket = await TicketManager.create(productsWithSock, purchaser);
     return { ticket, productsWithoutStock }
   }
-
 }

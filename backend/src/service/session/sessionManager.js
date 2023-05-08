@@ -1,7 +1,7 @@
 import { compareHash } from "../../utils/bcrypt.js";
 import { Unauthorized } from "../../utils/error.js";
 import { generateToken } from "../../utils/jwt.js";
-import UserManager from "../user/userController.js";
+import UserManager from "../user/userManager.js";
 import jwt from 'jsonwebtoken';
 
 /**
