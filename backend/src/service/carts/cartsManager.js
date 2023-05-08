@@ -98,6 +98,14 @@ export default class CartsManager {
     return result;
   }
 
+  async deleteProductsList (productList, cid) {
+    const productIdList = productList.map(product => product._id);
+    return Carts.updateOne({_id: cid},
+    {"$pull": {
+      "products": { "product": { $in: productIdList} }
+    }}).exec();
+  }
+
   async getProductsStockDetail (products) {
     return products.reduce(async ( accum ,{ product, quantity}) => {
       const { productsWithoutStock, productsWithSock } = await accum;
@@ -109,10 +117,13 @@ export default class CartsManager {
     }, Promise.resolve({ productsWithoutStock: [], productsWithSock: []}))
   }
 
+
+
   async purchase (cid, purchaser) {
     const cart = await this.getCartById(cid);
     const { productsWithoutStock, productsWithSock } = await this.getProductsStockDetail(cart.products);
     const ticket = await TicketManager.create(productsWithSock, purchaser);
+    await this.deleteProductsList(productsWithSock, cid);
     return { ticket, productsWithoutStock }
   }
 }
