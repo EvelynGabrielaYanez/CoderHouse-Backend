@@ -112,7 +112,7 @@ export default class CartsManager {
       const instanceProduct = new Product(product);
       const { error } = await instanceProduct.removeProducts(quantity) ?? {};
       if(error) productsWithoutStock.push(instanceProduct._id);
-      else productsWithSock.push(instanceProduct);
+      else productsWithSock.push({ product: instanceProduct, quantity });
       return { productsWithoutStock, productsWithSock };
     }, Promise.resolve({ productsWithoutStock: [], productsWithSock: []}))
   }

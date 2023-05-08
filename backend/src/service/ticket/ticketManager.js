@@ -6,8 +6,8 @@ import Ticket from "../../dao/models/ticket.js";
 export default class TicketManager {
   static async create (products, purchaser) {
     const ticketData = {
-      amount: products.reduce((total, product)=> {
-        total += product.price;
+      amount: products.reduce((total, {product, quantity})=> {
+        total += (product.price * quantity);
         return total;
       }, 0),
       purchaser
