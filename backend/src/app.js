@@ -4,7 +4,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import { create } from 'express-handlebars';
 import router from './routes/index.routes.js';
 import passport from 'passport';
 import initializePassport from './configuration/passport.config.js';
@@ -26,17 +25,6 @@ const corsOptions = { //Reviso si el cliente que intenta ingresar a mi servidor 
     }
 }
 
-const Handlebars = create({
-  helpers: {
-    'ifNotEq': function(v1, v2, options) {
-      return v1 !== v2 ? options.fn(this) : options.inverse(this);
-    },
-    'ifEq': function(v1, v2, options) {
-      return v1 === v2 ? options.fn(this) : options.inverse(this);
-    }
-  }
-});
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -54,9 +42,6 @@ mongoose.connect(env.dbUrl, {
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(passport.initialize());
 initializePassport();
-app.engine('handlebars', Handlebars.engine);
-app.set('view engine', 'handlebars');
-app.set('views', path.resolve(__dirname, './views'));
 
 // Se definen las rutas
 app.use('/', express.static(__dirname + '/public'));

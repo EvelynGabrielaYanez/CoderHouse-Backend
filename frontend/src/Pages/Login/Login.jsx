@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-export const Login = ({ loger }) => {
+export const Login = () => {
   const datForm = useRef();
   const navigate = useNavigate()
   const consultarForm = (e) => {
@@ -8,23 +8,24 @@ export const Login = ({ loger }) => {
     e.preventDefault()
     const datosFormulario = new FormData(datForm.current) //Pasar de HTML a Objeto Iterable
     const cliente = Object.fromEntries(datosFormulario) //Pasar de objeto iterable a objeto simple
-    debugger
     fetch('http://localhost:8080/api/session/login', {
       method: "POST",
       headers: {
-        'Authorization': 'bearer ' + document.cookie.split("; ").find((row) => row.startsWith("token="))?.split("=")[1],
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(cliente)
     })
-      .then(response => response.json())
+      .then(response => {
+        if (response.status !== 200) throw new Error(response.status);
+        return response.json()
+      })
       .then(data => {
-        document.cookie = `token=${data.token};expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/`
-        console.log(data.token)
-        loger(true);
+        document.cookie = `token=${data.token};expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/`;
         navigate('/products')
       })
-      .catch(error => console.error(error))
+      .catch(error => {
+        console.error(error)
+      })
     e.target.reset()
   }
   return (

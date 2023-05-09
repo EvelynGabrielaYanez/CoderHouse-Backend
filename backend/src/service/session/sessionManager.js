@@ -21,8 +21,4 @@ export default class SessionManager {
       return { message: "Creedenciales validas", userData: user } ;
     });
  }
-
-  static async logout (session) {
-    if(session?.user) session.destroy();
-  }
 }
