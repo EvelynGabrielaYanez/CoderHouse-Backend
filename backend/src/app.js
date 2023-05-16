@@ -9,6 +9,7 @@ import passport from 'passport';
 import initializePassport from './configuration/passport.config.js';
 import cors from 'cors';
 import { authVerification } from './utils/jwt.js';
+import { onError } from './midldlewares/errors/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -46,6 +47,7 @@ initializePassport();
 // Se definen las rutas
 app.use('/', express.static(__dirname + '/public'));
 app.use(router);
+app.use(onError);
 app.all('*', (req, res) => {
   res.status(404).json({
     message: `La ruta ${req.url} y el metodo ${req.method} no estan implementados`

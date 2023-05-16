@@ -1,23 +1,23 @@
 import ProductManager from '../../service/product/productManager.js';
-import { BadRequest, NotFound } from "../../utils/error.js";
+import { BadRequest, ERROR_DICTIONARY } from "../../utils/error.js";
+import { translate } from '../../utils/string.js';
 
 /**
  * Clase encargada de manejar la captura de errores, validar
  */
 export default class ProductHttpManager {
-  static async addProduct (req, res) {
+  static async addProduct (req, res, next) {
     try {
       const thumbnail = req.files.map((fileData) => fileData.originalname);
       const response = await (new ProductManager()).addProduct({...req.body, thumbnail});
-      if (!response) throw new BadRequest(`El producto code: ${req.body.code} ya se encuentra cargado`);
+      if (!response) throw new BadRequest(translate(ERROR_DICTIONARY.PRODUCT_ALREDY_LOADED, req.body.code));
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
  }
 
-  static async getProducts (req, res) {
+  static async getProducts (req, res, next) {
     try {
       let { limit = null, sort , page = null, category, stock} = req.query || {};
       limit = limit ? parseInt(limit) : limit;
@@ -36,46 +36,38 @@ export default class ProductHttpManager {
         nextLink: nextLink
       });
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      if (error instanceof NotFound) return res.status(400).json({ message: error.message });
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 
-  static async getProductsById (req, res) {
+  static async getProductsById (req, res, next) {
     try {
       const pid = req.params.pid;
       const response = await (new ProductManager().getProductsById(pid));
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      if (error instanceof NotFound) return res.status(404).json({ message: error.message})
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 
-  static async updateProduct (req, res) {
+  static async updateProduct (req, res, next) {
     try {
       const pid = req.params.pid;
       const thumbnail = req.files.map((fileData) => fileData.originalname);
       const response =  await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail});
       res.status(200).json(response);
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      if (error instanceof NotFound) return res.status(404).json({ message: error.message})
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 
-  static async deleteProduct (req, res) {
+  static async deleteProduct (req, res, next) {
     try {
       const pid = req.params.pid;
       const response = await (new ProductManager()).deleteProduct(pid);
       res.status(200).json({ deletedCount: response });
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message });
-      if (error instanceof NotFound) return res.status(404).json({ message: error.message})
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 }

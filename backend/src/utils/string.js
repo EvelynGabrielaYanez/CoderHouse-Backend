@@ -8,3 +8,10 @@ export const getUrlPage = (page, url) =>  {
   }).join('&')
  return `${path}?${newParams}`;
 }
+
+export function translate(value, ...args) {
+  args.forEach((arg, index) => {
+    value = value.replace(`{${index}}`, arg)
+  });
+  return value;
+}

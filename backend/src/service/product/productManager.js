@@ -1,6 +1,6 @@
 import Product from '../../dao/models/product.js';
-import { NotFound } from "../../utils/error.js";
-import { getUrlPage } from '../../utils/string.js';
+import { ERROR_DICTIONARY, NotFound } from "../../utils/error.js";
+import { getUrlPage, translate } from '../../utils/string.js';
 
 /**
  * Clase encargada de manejar el listado de productos
@@ -40,7 +40,7 @@ export default class ProductManager {
    */
   async updateProduct ({ id, title, description, price, thumbnail, code, stock } = {}) {
     const productToUpdate = await this.getProductsById(id);
-    if (!productToUpdate) throw new NotFound ('El id de producto no se encuentra registrado para actualizar');
+    if (!productToUpdate) throw new NotFound (translate(ERROR_DICTIONARY.INVALID_PRODUCT_ID, id));
     productToUpdate.title = title ?? productToUpdate.Title;
     productToUpdate.description = description ?? productToUpdate.Description;
     productToUpdate.price = price ?? productToUpdate.Price;
@@ -58,7 +58,7 @@ export default class ProductManager {
    */
   async deleteProduct (productId) {
     const { deletedCount } = await Product.deleteOne({_id: productId }).exec();
-    if (!deletedCount) throw new NotFound('El id ingresado no corresponde a un producto que se encuentre registrado');
+    if (!deletedCount) throw new NotFound(translate(ERROR_DICTIONARY.INVALID_PRODUCT_ID, productId));
     return deletedCount;
   }
 
@@ -69,7 +69,7 @@ export default class ProductManager {
    */
   async getProductsById (id) {
     const product = await Product.findById(id).exec()
-    if (!product) throw new NotFound('El id ingresado no corresponde a un id que se encuentre registrado');
+    if (!product) throw new NotFound(translate(ERROR_DICTIONARY.INVALID_PRODUCT_ID, id));
     return product;
   }
 

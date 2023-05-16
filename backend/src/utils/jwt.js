@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import { Unauthorized } from "./error.js";
+import { ERROR_DICTIONARY, Unauthorized } from "./error.js";
 
 export const generateToken = (user) => {
   return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' });
@@ -22,7 +22,7 @@ export const current = (roles) => {
   return async (req, res, next) => {
     try {
       const userToValidate = req.user;
-      if(!userToValidate || !roles.includes(userToValidate.role)) throw new Unauthorized('Usuario no autorizado');
+      if(!userToValidate || !roles.includes(userToValidate.role)) throw new Unauthorized(ERROR_DICTIONARY.UNAUTHORIZED_USER);
       next()
     } catch (error) {
       if(error instanceof Unauthorized) return res.status(401).json({ message: "Unauthorized", error: error.message});

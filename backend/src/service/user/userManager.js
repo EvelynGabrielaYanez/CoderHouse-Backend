@@ -1,7 +1,8 @@
 import User from "../../dao/models/user.js";
 import { createHash } from "../../utils/bcrypt.js";
-import { BadRequest, InvalidParams } from "../../utils/error.js";
+import { BadRequest, ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
 import { generateToken } from "../../utils/jwt.js";
+import { translate } from "../../utils/string.js";
 import CartsManager from "../carts/cartsManager.js";
 
 /**
@@ -10,7 +11,7 @@ import CartsManager from "../carts/cartsManager.js";
 export default class UserManager {
   static async create ({ email, firstName, lastName, age, role, password }) {
     const user = await UserManager.getUser(email);
-    if (user) throw new InvalidParams('El usuario ya existe');
+    if (user) throw new InvalidParams(ERROR_DICTIONARY.USER_ALREADY_EXIST);
     const cart = await (new CartsManager()).save();
     return await User.create({ email, firstName, lastName, age, role, cart: cart._id, password: createHash(password) });
   }
@@ -26,7 +27,7 @@ export default class UserManager {
   static async register({ email, firstName, lastName, age, password }) {
     const user = await UserManager.getUser(email);
     if (user) {
-      throw new BadRequest('El usuario ya se encuentra registardo');
+      throw new BadRequest(translate(ERROR_DICTIONARY.ALREDY_REGISTERED, email));
     }
     const newUser = await UserManager.create({ firstName, lastName, email, age, password });
     const token = generateToken(newUser);

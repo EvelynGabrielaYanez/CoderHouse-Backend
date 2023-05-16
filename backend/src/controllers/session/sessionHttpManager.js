@@ -1,5 +1,5 @@
 import passport from "passport";
-import { BadRequest, NotFound, Unauthorized } from "../../utils/error.js";
+import { BadRequest, ERROR_DICTIONARY, NotFound, Unauthorized } from "../../utils/error.js";
 import SessionManager from "../../service/session/sessionManager.js";
 
 /**
@@ -9,7 +9,7 @@ export default class SessionHttpManager {
   static async login(req, res, next) {
     passport.authenticate('jwt', { session: false }, async (err, user, info) => {
       try {
-        if (err) throw new Unauthorized("Error en consulta de token");
+        if (err) throw new Unauthorized(ERROR_DICTIONARY.ERROR_GETTING_TOKEN);
         const { email, password } = req.body;
         const token = req.cookies?.jwt;
         const response = await SessionManager.login({ email, password, user, token });
@@ -17,25 +17,19 @@ export default class SessionHttpManager {
         else req.user = user;
         res.status(200).json(response);
       } catch (error) {
-        console.error({ message: error.message, stack: error.stack });
-        if (error instanceof Unauthorized) return res.status(401).json({ status: "error", error: error.message })
-        if (error instanceof BadRequest) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
-        if (error instanceof NotFound) return res.status(400).json({ message: 'Usuario o contraseña invalidos', status: 'error' });
-        res.status(500).json({ message: error.message, stack: error.stack, status: 'error' });
+        next(error);
       }
     })(req, res, next);
   }
 
-  static async logout(req, res) {
+  static async logout(req, res, next) {
     try {
       const { jwt } = req.cookies;
-      if (!jwt) throw new BadRequest('Sesión invalida');
+      if (!jwt) throw new BadRequest(ERROR_DICTIONARY.INVALID_SESSION);
       res.clearCookie('jwt');
       res.status(200).json({ message: 'Logout con exito' })
     } catch (error) {
-      console.error({ message: error.message, stack: error.stack });
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
-      res.status(500).json({ message: error.message, stack: error.stack });
+      next(error);
     }
   }
 
@@ -44,13 +38,12 @@ export default class SessionHttpManager {
     res.redirect('/');
   }
 
-  static getCurrent(req, res) {
+  static getCurrent(req, res, next) {
     try {
-      if (!req?.user) throw new BadRequest('No hay ninguna sesión');
+      if (!req?.user) throw new BadRequest(ERROR_DICTIONARY.NO_SESSION);
       res.status(200).json(req?.user);
     } catch (error) {
-      if (error instanceof BadRequest) return res.status(400).json({ message: error.message, status: 'error' });
-      res.status(500).json({ message: error.message, stack: error.stack, status: 'error' });
+      next(error);
     }
   }
 }

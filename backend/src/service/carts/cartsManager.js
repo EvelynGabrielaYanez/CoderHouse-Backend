@@ -1,8 +1,9 @@
 
-import { InvalidParams, NotFound } from "../../utils/error.js";
+import { ERROR_DICTIONARY, InvalidParams, NotFound } from "../../utils/error.js";
 import Carts from "../../dao/models/carts.js";
 import Product from "../../dao/models/product.js";
 import TicketManager from "../ticket/ticketManager.js";
+import { translate } from "../../utils/string.js";
 
 export default class CartsManager {
   /**
@@ -12,7 +13,7 @@ export default class CartsManager {
    */
   async getCartById (id) {
     const cart = await Carts.findById(id).populate('products.product').exec();
-    if (!cart) throw new NotFound('El id ingresado no corresponde a un id que se encuentre registrado');
+    if (!cart) throw new NotFound(translate(ERROR_DICTIONARY.INVALID_USER_ID, id));
     return cart;
   }
 
@@ -47,7 +48,7 @@ export default class CartsManager {
    */
   async addProduct({ cid, pid }) {
     const cart = await this.getCartById(cid);
-    if (!cart) throw new InvalidParams(`El carrito de id ${cid} no existe`);
+    if (!cart) throw new InvalidParams(translate(ERROR_DICTIONARY, cid));
     await cart.addProduct({ pid });
     await cart.save();
     return cart;

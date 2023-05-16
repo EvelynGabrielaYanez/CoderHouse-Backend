@@ -9,23 +9,23 @@ export default class MessageHttpManager {
    * @param {*} req
    * @param {*} res
    */
-  static async getMessage (req, res) {
+  static async getMessage (req, res, next) {
     try {
       const response = await (new MessageManager().getMessages());
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 
-  static async save (req, res) {
+  static async save (req, res, next) {
     try {
       const { message } = req.body;
       const { _id } = req.user;
       const response = await (new MessageManager().save({ sender: _id, message }));
       res.status(200).json(response);
     } catch (error) {
-      res.status(500).json({ message: error.message, stack: error.stack} );
+      next(error);
     }
   }
 }
