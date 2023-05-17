@@ -12,4 +12,14 @@ export default class MockingHttpManager {
       next(error);
     }
  }
+ static async logTest(req, res, next) {
+  try {
+    await (new MockingManager()).logTest();
+    const response = { message: 'Log realizado con éxito' };
+    req.logger.http(response);
+    res.status(200).send(response);
+  } catch (error) {
+    next(error);
+  }
+ }
 }

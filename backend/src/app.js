@@ -10,6 +10,8 @@ import initializePassport from './configuration/passport.config.js';
 import cors from 'cors';
 import { authVerification } from './utils/jwt.js';
 import { onError } from './midldlewares/errors/index.js';
+import logger from './utils/logger.js';
+import { log } from './midldlewares/logger/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -36,13 +38,14 @@ mongoose.connect(env.dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('Conexión a la base realizada con éxito'))
-  .catch((error) => console.log('Se produjo un error al conectarse con la base de datos error: ', error.stack));
+  .then(() => logger.info('Conexión a la base realizada con éxito'))
+  .catch((error) => logger.info('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
 // Se definen los middlewares
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(passport.initialize());
 initializePassport();
+app.use(log);
 
 // Se definen las rutas
 app.use('/', express.static(__dirname + '/public'));
@@ -55,4 +58,4 @@ app.all('*', (req, res) => {
 });
 
 // Se inicia la escucha del servidor
-app.listen(env.port, () => console.log(`Server escuchando en el puerto ${env.port}`));
+app.listen(env.port, () => logger.info(`Server escuchando en el puerto ${env.port}`));

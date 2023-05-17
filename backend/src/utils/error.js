@@ -1,3 +1,4 @@
+import logger from "./logger.js";
 
 const EnumErrors = {
   INVALID_PARAMS: 400,
@@ -11,10 +12,10 @@ const EnumErrors = {
 
 export const errorHandler = ({ error, res }) => {
   if (error instanceof CustomError) {
-    console.error(JSON.stringify({ error: error.message, status: error.httpErrorCode, stack: error.stack }));
+    logger.error(JSON.stringify({ error: error.message, status: error.httpErrorCode, stack: error.stack }));
     return res.status(error.httpErrorCode).json({ error: error.message, status: error.httpErrorCode });
   }
-  console.error(JSON.stringify({ error: error.message, status: EnumErrors.INTERNAL_SERVER_ERROR, stack: error.stack }));
+  logger.error(JSON.stringify({ error: error.message, status: EnumErrors.INTERNAL_SERVER_ERROR, stack: error.stack }));
   res.status(EnumErrors.INTERNAL_SERVER_ERROR).json({ error: error.message, status: error.httpErrorCode });
 }
 

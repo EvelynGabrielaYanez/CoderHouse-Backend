@@ -1,5 +1,6 @@
 import MockedProducts from "../../dao/models/mockedProducts.js";
 import { faker } from '@faker-js/faker';
+import logger from "../../utils/logger.js";
 
 
 
@@ -38,5 +39,14 @@ export default class MockingManager {
       stock: faker.number.int(),
       status: faker.datatype.boolean(),
     };
+  }
+
+  logTest() {
+    logger.debug('Soy un log de consola para desarrollo - No me muestro en producción');
+    logger.http('Soy un log de consola para desarrollo - No me muestro en producción');
+    logger.info('Soy un log de consola para desarrollo - Y en el archivo ecommers en produccion');
+    logger.warning('Soy un log de consola para desarrollo - Y en el archivo ecommers en produccion');
+    logger.error('Soy un log de consola para desarrollo - Y en el archivo error e ecommers en produccion');
+    logger.fatal('Soy un log de consola para desarrollo - Y en el archivo error e ecommers en produccion');
   }
 }
