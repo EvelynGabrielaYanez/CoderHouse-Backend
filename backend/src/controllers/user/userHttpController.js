@@ -1,4 +1,3 @@
-import MailManager from "../../service/mail/mailManager.js";
 import UserManager from "../../service/user/userManager.js";
 import { ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
 import { translate } from "../../utils/string.js";
@@ -12,7 +11,7 @@ export default class UserHttpManager {
       const { firstName, lastName, email, age, password } = req.body;
       if (!firstName || !lastName || !email || !age || !password) throw new InvalidParams(translate(ERROR_DICTIONARY.CREATE_USER_INVALID_PARAMS, firstName, lastName, email, age));
       const { token, user } = await UserManager.register({ firstName, lastName, email, age, password });
-      res.cookie('jwt', token, { httpOnly: true }); // TODO esto no va
+      // res.cookie('jwt', token, { httpOnly: true });
       res.status(200).json({ status: 'success', user, token, message: 'Usuario creado con éxito' });
     } catch (error) {
       next(error);
@@ -23,6 +22,9 @@ export default class UserHttpManager {
     try {
       const { email, newPassword } = req.body;
       const userData = await UserManager.recover({ email, newPassword });
+      // Elimino el token de recuperacion y deslogeao al usuario si se encontraba logeado
+      res.clearCookie('jwt');
+      res.clearCookie('jwtRecover');
       res.status(200).json({ status: 'success', message: 'Password generada con éxito', userData });
     } catch (error) {
       next(error);

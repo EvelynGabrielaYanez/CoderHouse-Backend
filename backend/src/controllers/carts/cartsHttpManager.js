@@ -41,7 +41,7 @@ export default class CartsHttpManager {
    * @param {*} req
    * @param {*} res
    */
-  static async addProduct (_req, res, next) {
+  static async addProduct (req, res, next) {
     try {
       const cid = req.params.cid;
       const pid = req.params.pid;
@@ -58,7 +58,7 @@ export default class CartsHttpManager {
    * @param {*} req
    * @param {*} res
    */
-    static async updateProducts (_req, res, next) {
+    static async updateProducts (req, res, next) {
       try {
         const products = req.body;
         const cid = req.params.cid;
@@ -79,7 +79,7 @@ export default class CartsHttpManager {
    * @param {*} req
    * @param {*} res
    */
-  static async updateProductQty (_req, res, next) {
+  static async updateProductQty (req, res, next) {
     try {
       const { cid, pid } = req.params;
       const qty = parseInt(req.body.qty);
@@ -97,7 +97,7 @@ export default class CartsHttpManager {
    * @param {*} req
    * @param {*} res
    */
-  static async deleteProduct (_req, res, next) {
+  static async deleteProduct (req, res, next) {
     try {
       const { cid, pid } = req.params;
       const response = await (new CartsManager().deleteProduct({ cid, pid }));
@@ -113,7 +113,7 @@ export default class CartsHttpManager {
    * @param {*} res
    * @returns
    */
-  static async deleteProducts (_req, res, next) {
+  static async deleteProducts (req, res, next) {
     try {
       const { cid } = req.params;
       const response = await (new CartsManager().deleteProducts(cid));
