@@ -1,5 +1,5 @@
 import passport from "passport";
-import { BadRequest, ERROR_DICTIONARY, NotFound, Unauthorized } from "../../utils/error.js";
+import { BadRequest, ERROR_DICTIONARY, Unauthorized } from "../../utils/error.js";
 import SessionManager from "../../service/session/sessionManager.js";
 
 /**
@@ -13,7 +13,9 @@ export default class SessionHttpManager {
         const { email, password } = req.body;
         const token = req.cookies?.jwt;
         const response = await SessionManager.login({ email, password, user, token });
-        if (response.token) res.cookie('jwt', response.token, { httpOnly: true });
+        if (response.token) { 
+          res.cookie('jwt', response.token, { httpOnly: true });
+        }
         else req.user = user;
         res.status(200).json(response);
       } catch (error) {

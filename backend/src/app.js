@@ -31,6 +31,7 @@ const corsOptions = { //Reviso si el cliente que intenta ingresar a mi servidor 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.JWT_SECRET));
 // app.use(cors(corsOptions));
 app.use(authVerification('jwt'));
 
@@ -42,7 +43,6 @@ mongoose.connect(env.dbUrl, {
   .catch((error) => logger.info('Se produjo un error al conectarse con la base de datos error: ', error.stack));
 
 // Se definen los middlewares
-app.use(cookieParser(process.env.JWT_SECRET));
 app.use(passport.initialize());
 initializePassport();
 app.use(log);

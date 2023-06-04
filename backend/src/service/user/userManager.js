@@ -1,9 +1,11 @@
+import config from "../../configuration/config.js";
 import User from "../../dao/models/user.js";
 import { createHash } from "../../utils/bcrypt.js";
 import { BadRequest, ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
 import { generateToken } from "../../utils/jwt.js";
 import { translate } from "../../utils/string.js";
 import CartsManager from "../carts/cartsManager.js";
+import MailManager from "../mail/mailManager.js";
 
 /**
  * Clase encargada de manejar la logica de negocio e interactuar con el modelo user de la base de datos
@@ -17,11 +19,11 @@ export default class UserManager {
   }
 
   static async getUser(email) {
-    return await User.findOne({ email }).populate('cart').exec();
+    return User.findOne({ email }).populate('cart').exec();
   }
 
   static async findById(id) {
-   return await User.findById(id).exec();
+   return User.findById(id).exec();
   }
 
   static async register({ email, firstName, lastName, age, password }) {
@@ -32,5 +34,35 @@ export default class UserManager {
     const newUser = await UserManager.create({ firstName, lastName, email, age, password });
     const token = generateToken(newUser);
     return { user: newUser, token};
+  }
+
+  static async recover ({ email, newPassword }) {
+    const userToRecover = await UserManager.getUser(email);
+    if (!userToRecover) throw new InvalidParams('El usuario ingresado para recuperar la contraseña es invalido');
+    
+    const contra = createHash(newPassword);;
+    console.log(contra);
+    console.debug(newPassword);
+    userToRecover.password = createHash(newPassword);
+    await userToRecover.save();
+    return userToRecover;
+  }
+
+  static async sendRecoverEmail (email) {
+    const userToRecover = await UserManager.getUser(email);
+    console.log(userToRecover);
+    if (!userToRecover) throw new InvalidParams('El usuario ingresado para recuperar la contraseña es invalido');
+    const token = generateToken(userToRecover, config.recoverPasswordTime);
+    const recoverPasswordLink = `http://localhost:${config.port}/recover`;
+    const sendEmailDetail = MailManager.send({
+      to: email,
+      subject: 'No responder este mensaje. Fue generado de manera automatica', // TODO ver por que no se ve en el mail
+      html: `
+        <html>
+          <h1>Restablecer contraseña</h1>
+          <p>Haga click para volver a generar una contraseña.<b><a href="${recoverPasswordLink}" class="myButton">Recuperar Usuario</a></b></p>
+        </html>`
+    });
+    return { token, sendEmailDetail};
   }
 }

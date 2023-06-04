@@ -11,5 +11,9 @@ export default {
   sessionSecret: process.env.SESSION_SECRET,
   salt: process.env.SALT,
   clientId: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET
+  clientSecret: process.env.CLIENT_SECRET,
+  mailTransportPassword: process.env.MAIL_TRANSPORT_PASSWORD,
+  mailTransport: process.env.MAIL_TRANSPORT,
+  mailTransportPort: process.env.MAIL_TRANSPORT_PORT,
+  recoverPasswordTime: process.env.RECOVER_PASSWORD_TIME
 };

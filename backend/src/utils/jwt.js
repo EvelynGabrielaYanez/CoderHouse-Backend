@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import { ERROR_DICTIONARY, Unauthorized } from "./error.js";
+import { unauthorizedEndpondList } from "./constants.js";
 
-export const generateToken = (user) => {
-  return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '24h' });
+export const generateToken = (user, expiresIn) => {
+  return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: expiresIn || '24h' });
 }
 
 export const authVerification = (strategy) => {
@@ -30,8 +31,3 @@ export const current = (roles) => {
     }
   }
 }
-
-const unauthorizedEndpondList = [
-  '/api/session/login',
-  '/api/user/register'
-];
