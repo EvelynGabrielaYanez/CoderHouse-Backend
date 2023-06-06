@@ -26,7 +26,7 @@ export default  class Carts extends CartsModel {
    * Método encargado de agregar un id al array de productos
    * @param {*} pid
    */
-  async addProduct ({ pid, quantity = 1}) {
+  async addProduct ({ pid, quantity = 1 }) {
     // busca el producto en el listado actualizar
     const product = this.products.find(({product}) => product._id.equals(pid));
     if (product)

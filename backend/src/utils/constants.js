@@ -10,3 +10,9 @@ export const unauthorizedEndpondList = [
   '/api/user/register',
   '/api/user/send-recover-email',
 ];
+
+export const USER_ROLES = {
+  ADMIN: 'Admin',
+  USER: 'User',
+  PREMIUM: 'Premium'
+}

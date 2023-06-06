@@ -3,7 +3,7 @@ import passport from "passport";
 import { ERROR_DICTIONARY, Unauthorized } from "./error.js";
 import { unauthorizedEndpondList } from "./constants.js";
 
-export const generateToken = (user, expiresIn) => {
+export const generateToken = ({ user, expiresIn }) => {
   return jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: expiresIn || '24h' });
 }
 
@@ -12,9 +12,9 @@ export const authVerification = (strategy) => {
     if(unauthorizedEndpondList.includes(req.path)) return next();
     passport.authenticate(strategy, (error, user, info) => {
       if (error) return next(error);
-      if (!user) return res.status(401).json({ error: info.message ? info.message : info.toString() })
-      req.user = user
-      next()
+      if (!user) return res.status(401).json({ error: info.message ?? info.toString() });
+      req.user = user;
+      next();
     })(req, res, next)
   }
 }

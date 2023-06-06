@@ -8,8 +8,9 @@ import { translate } from '../../utils/string.js';
 export default class ProductHttpManager {
   static async addProduct (req, res, next) {
     try {
+      const { _id: owner } = req.user;
       const thumbnail = req.files.map((fileData) => fileData.originalname);
-      const response = await (new ProductManager()).addProduct({...req.body, thumbnail});
+      const response = await (new ProductManager()).addProduct({...req.body, thumbnail, owner});
       if (!response) throw new BadRequest(translate(ERROR_DICTIONARY.PRODUCT_ALREDY_LOADED, req.body.code));
       res.status(200).json(response);
     } catch (error) {
@@ -53,8 +54,9 @@ export default class ProductHttpManager {
   static async updateProduct (req, res, next) {
     try {
       const pid = req.params.pid;
+      const { _id: owner, role } = req.user ?? {};
       const thumbnail = req.files.map((fileData) => fileData.originalname);
-      const response =  await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail});
+      const response = await (new ProductManager()).updateProduct({ ...req.body, id: pid, thumbnail, owner, role });
       res.status(200).json(response);
     } catch (error) {
       next(error);
@@ -64,7 +66,8 @@ export default class ProductHttpManager {
   static async deleteProduct (req, res, next) {
     try {
       const pid = req.params.pid;
-      const response = await (new ProductManager()).deleteProduct(pid);
+      const { _id: owner, role } = req.user ?? {};
+      const response = await (new ProductManager()).deleteProduct(pid, { owner, role });
       res.status(200).json({ deletedCount: response });
     } catch (error) {
       next(error);

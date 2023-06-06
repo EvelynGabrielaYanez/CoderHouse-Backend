@@ -15,7 +15,11 @@ const productSchema = new Schema({
     type: Number,
     default: 1
   },
-  category: String
+  category: String,
+  owner: {
+    type: String,
+    default: 'admin'
+  },
 });
 productSchema.plugin(paginate);
 const ProductModel = mongoose.model('products', productSchema);

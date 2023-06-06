@@ -45,7 +45,8 @@ export default class CartsHttpManager {
     try {
       const cid = req.params.cid;
       const pid = req.params.pid;
-      const response = await (new CartsManager().addProduct({ cid, pid }));
+      const { _id: ownerId, role: ownerRole } = req.user;
+      const response = await (new CartsManager().addProduct({ cid, pid, ownerId, ownerRole }));
       res.status(200).json(response);
     } catch (error) {
       next(error);

@@ -13,7 +13,7 @@ export default class SessionManager {
       const userBDD = await UserManager.getUser(email)
       if (!userBDD) throw new Unauthorized(ERROR_DICTIONARY.USER_NOT_FOUND);
       if (!compareHash(password, userBDD.password)) throw new Unauthorized('Contraseña no valida');
-      const token = generateToken(userBDD);
+      const token = generateToken({ user: userBDD });
       return { token, userData: userBDD };
     }
     return jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {

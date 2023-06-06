@@ -65,5 +65,11 @@ export const ERROR_DICTIONARY = {
   UNAUTHORIZED_USER: 'Usuario no autorizado',
   INVALID_USER_ID: 'El id ingresado {0} no corresponde a un id que se encuentre registrado',
   INVALID_PRODUCT_ID: 'El id de producto {0} no se encuentra registrado',
-  CREATE_USER_INVALID_PARAMS: 'Parametro invalidos. El usuario posee los siguientes parametros como obligatorios\n - Nombre: Debe ser un string {0} \n - Apellido: Debe ser un string {1}\n - email: Debe ser un string {2} \n - Edad: Debe ser un numero entero, {3}\n - Contraseña: Debe ser un string'
+  CREATE_USER_INVALID_PARAMS: 'Parametro invalidos. El usuario posee los siguientes parametros como obligatorios\n - Nombre: Debe ser un string {0} \n - Apellido: Debe ser un string {1}\n - email: Debe ser un string {2} \n - Edad: Debe ser un numero entero, {3}\n - Contraseña: Debe ser un string',
+  NO_USER_PRODUCTS: 'El usuario {0} no es dueño del producto {1}',
+  INVALID_RECOVER_USER: 'El usuario ingresado para recuperar la contraseña es invalido',
+  INVALID_RECOVER_PASSWORD: 'La nueva contraseña debe ser distinta a la anterior',
+  INVALID_USER_ROLE: 'Rol de usuario invalido',
+  INVALID_PRODUCT: 'El producto no se encuentra en registrado. Id: {0}',
+  PRODUCT_OWNER_CART_ADD: 'No es posible agregar productos si es el dueño. Dueño: {0} - Producto: {1}'
 }

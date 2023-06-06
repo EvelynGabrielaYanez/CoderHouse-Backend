@@ -2,6 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import ProductHttpManager from '../controllers/product/productHttpManager.js';
 import { current } from '../utils/jwt.js';
+import { USER_ROLES } from '../utils/constants.js';
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -16,14 +17,14 @@ const upload = multer({
 
 const productRouter = Router();
 
-productRouter.post('/', upload.array('thumbnails'), ProductHttpManager.addProduct);
+productRouter.post('/', upload.array('thumbnails'), current([USER_ROLES.ADMIN, USER_ROLES.PREMIUM]), ProductHttpManager.addProduct);
 
 productRouter.get('/', ProductHttpManager.getProducts);
 
 productRouter.get('/:pid', ProductHttpManager.getProductsById);
 
-productRouter.put('/:pid', upload.array('thumbnails'), current(['Admin']), ProductHttpManager.updateProduct);
+productRouter.put('/:pid', upload.array('thumbnails'), current([USER_ROLES.ADMIN, USER_ROLES.PREMIUM]), ProductHttpManager.updateProduct);
 
-productRouter.delete('/:pid', current(['Admin']), ProductHttpManager.deleteProduct);
+productRouter.delete('/:pid', current([USER_ROLES.ADMIN, USER_ROLES.PREMIUM]), ProductHttpManager.deleteProduct);
 
 export default productRouter;

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import CartsHttpManager from '../controllers/carts/cartsHttpManager.js';
 import { current } from '../utils/jwt.js';
+import { USER_ROLES } from '../utils/constants.js';
 
 const cartsRouter = Router();
 cartsRouter.get('/', CartsHttpManager.getCarts);
@@ -10,7 +11,7 @@ cartsRouter.put('/:cid', CartsHttpManager.updateProducts);
 cartsRouter.post('/:cid/purchase', CartsHttpManager.purchase);
 cartsRouter.delete('/:cid', CartsHttpManager.deleteProducts);
 cartsRouter.put('/:cid/product/:pid', CartsHttpManager.updateProductQty);
-cartsRouter.post('/:cid/product/:pid', current(['User']),  CartsHttpManager.addProduct);
+cartsRouter.post('/:cid/product/:pid', current([USER_ROLES.USER, USER_ROLES.PREMIUM]),  CartsHttpManager.addProduct);
 cartsRouter.delete('/:cid/product/:pid', CartsHttpManager.deleteProduct);
 
 export default cartsRouter;

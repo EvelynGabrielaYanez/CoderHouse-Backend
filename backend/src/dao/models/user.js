@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { USER_ROLES } from "../../utils/constants.js";
 
 const userSchema = new Schema({
   firstName: {
@@ -25,7 +26,7 @@ const userSchema = new Schema({
   },
   role: {
       type: String,
-      default: "User"
+      default: USER_ROLES.USER
   },
   password: {
       type: String,

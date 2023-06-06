@@ -4,6 +4,7 @@ import Carts from "../../dao/models/carts.js";
 import Product from "../../dao/models/product.js";
 import TicketManager from "../ticket/ticketManager.js";
 import { translate } from "../../utils/string.js";
+import { USER_ROLES } from "../../utils/constants.js";
 
 export default class CartsManager {
   /**
@@ -46,9 +47,12 @@ export default class CartsManager {
    * o el producto correspindiente al id se arrojara un error del tipo InvalidParams
    * @param {{ cid: int, pid: int }} param0
    */
-  async addProduct({ cid, pid }) {
+  async addProduct({ cid, pid, ownerId, ownerRole }) {
     const cart = await this.getCartById(cid);
-    if (!cart) throw new InvalidParams(translate(ERROR_DICTIONARY, cid));
+    if (!cart) throw new InvalidParams(translate(ERROR_DICTIONARY.CART_DOESNT_EXIT, cid));
+    const productToAdd = await Product.findById(pid);
+    if (!productToAdd) throw new InvalidParams(ERROR_DICTIONARY.INVALID_PRODUCT, pid);
+    if (ownerRole === USER_ROLES.PREMIUM && String(ownerId) === productToAdd.owner) throw new InvalidParams(translate(ERROR_DICTIONARY.PRODUCT_OWNER_CART_ADD, ownerId, pid));
     await cart.addProduct({ pid });
     await cart.save();
     return cart;

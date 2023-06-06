@@ -16,23 +16,19 @@ import { log } from './midldlewares/logger/index.js';
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
-const whiteList = ['http://localhost:3000'] //Rutas validas a mi servidor
+//Rutas validas a mi servidor
+const whiteList = [ 'http://localhost:3000' ];
 
-const corsOptions = { //Reviso si el cliente que intenta ingresar a mi servidor esta o no en esta lista
-    origin: (origin, callback) => {
-        if (whiteList.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by Cors'))
-        }
-    }
+//Reviso si el cliente que intenta ingresar a mi servidor esta o no en esta lista
+const corsOptions = {
+    origin: (origin, callback) => whiteList.indexOf(origin) === -1 ? callback(null, true) : callback(new Error('Not allowed by Cors'))
 }
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(authVerification('jwt'));
 
 mongoose.connect(env.dbUrl, {
