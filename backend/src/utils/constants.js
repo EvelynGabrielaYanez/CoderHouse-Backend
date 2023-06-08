@@ -7,7 +7,7 @@ export const recoverUserPath = '/api/user/recover';
 
 export const unauthorizedEndpondList = [
   '/api/session/login',
-  '/api/user/register',
+  '/api/user',
   '/api/user/send-recover-email',
 ];
 
