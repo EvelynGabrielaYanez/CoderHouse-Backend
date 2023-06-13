@@ -5,10 +5,12 @@ export const nodeEnv = {
 
 export const recoverUserPath = '/api/user/recover';
 
+export const swaggerApi = '/api-docs'
+
 export const unauthorizedEndpondList = [
   '/api/session/login',
   '/api/user',
-  '/api/user/send-recover-email',
+  '/api/user/send-recover-email'
 ];
 
 export const USER_ROLES = {

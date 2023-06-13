@@ -1,0 +1,555 @@
+
+paths:
+  /api/products/:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Retorna la lista de productos
+      tags:
+        - Productos
+      description: Retorna la lista de productos filtrando por los parametros pasados
+      parameters:
+        - in: path
+          name: page
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - in: path
+          name: thumbnail
+          required: false
+        - in: path
+          name: limit
+          required: false
+        - in: path
+          name: sort
+          required: false
+        - in: path
+          name: category
+          required: false
+        - in: path
+          name: stock
+          required: false
+      responses:
+        500:
+          $ref: '#/components/responses/InternalServerError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          $ref: '#/components/responses/UnauthorizedError'
+        200:
+          description:  >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `jwt`. You need to include this cookie in subsequent requests.
+            Detalle del usuario y estado de respuesta
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalDocs:
+                    type: integer
+                    description: Número total de documentos
+                  payload:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: ID del producto
+                        title:
+                          type: string
+                          description: Título del producto
+                        description:
+                          type: string
+                          description: Descripción del producto
+                        price:
+                          type: number
+                          description: Precio del producto
+                        thumbnail:
+                          type: array
+                          items:
+                            type: string
+                          description: Lista de miniaturas del producto
+                        code:
+                          type: string
+                          description: Código del producto
+                        stock:
+                          type: integer
+                          description: Stock disponible del producto
+                        status:
+                          type: integer
+                          description: Estado del producto
+                        category:
+                          type: string
+                          description: Categoría del producto
+                        __v:
+                          type: integer
+                          description: Versión del objeto
+                        owner:
+                          type: string
+                          description: Propietario del producto
+                      required:
+                        - _id
+                        - title
+                        - description
+                        - price
+                        - thumbnail
+                        - code
+                        - stock
+                        - status
+                        - category
+                        - owner
+                  limit:
+                    type: integer
+                    description: Límite de documentos por página
+                  totalPages:
+                    type: integer
+                    description: Número total de páginas
+                  page:
+                    type: integer
+                    description: Página actual
+                  pagingCounter:
+                    type: integer
+                    description: Contador de paginación
+                  hasPrevPage:
+                    type: boolean
+                    description: Indica si hay una página anterior
+                  hasNextPage:
+                    type: boolean
+                    description: Indica si hay una página siguiente
+                  prevPage:
+                    type: integer
+                    description: Número de página anterior
+                  nextPage:
+                    type: integer
+                    description: Número de página siguiente
+                  prevLink:
+                    type: string
+                    description: Enlace a la página anterior
+                  nextLink:
+                    type: string
+                    description: Enlace a la página siguiente
+                example:
+                  totalDocs: 31
+                  payload:
+                    - _id: "6418eb202f166e0c87892563"
+                      title: "Cuarto Producto"
+                      description: "Producto sin imagen"
+                      price: 900
+                      thumbnail:
+                        - "2023-02-02.png"
+                        - "Captura-error.JPG"
+                      code: "00030"
+                      stock: 95
+                      status: 1
+                      category: "GATOS"
+                      __v: 1
+                      owner: "admin"
+                    - _id: "6418eb752f166e0c87892567"
+                      title: "Primer Producto"
+                      description: "ProductoGatos"
+                      price: 900
+                      thumbnail:
+                        - "Captura-error.JPG"
+                      code: "00001"
+                      stock: 99
+                      status: 1
+                      category: "GATOS"
+                      owner: "admin"
+                  limit: 10
+                  totalPages: 4
+                  page: 1
+                  pagingCounter: 1
+                  hasPrevPage: false
+                  hasNextPage: true
+                  prevPage: null
+                  nextPage: 2
+                  prevLink: ""
+                  nextLink: "http://localhost:8080/api/products?page=2"
+
+  /api/products:
+    post:
+      security:
+        - cookieAuth: []
+      summary: Guarda un nuevo producto
+      tags:
+        - Productos
+      description:  Guarda un producto y retorna la lista de productos filtrando por los parametros pasados
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                code:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                categoty:
+                  type: string
+                thumbnails:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description:  >
+            Producto cargado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    description: Título del producto
+                  description:
+                    type: string
+                    description: Descripción del producto
+                  price:
+                    type: number
+                    description: Precio del producto
+                  thumbnail:
+                    type: array
+                    items:
+                      type: string
+                    description: Lista de miniaturas del producto
+                  code:
+                    type: string
+                    description: Código del producto
+                  stock:
+                    type: integer
+                    description: Stock disponible del producto
+                  status:
+                    type: integer
+                    description: Estado del producto
+                  category:
+                    type: string
+                    description: Categoría del producto
+                  owner:
+                    type: string
+                    description: Propietario del producto
+                  _id:
+                    type: string
+                    description: ID del producto
+                required:
+                  - title
+                  - description
+                  - price
+                  - thumbnail
+                  - code
+                  - stock
+                  - status
+                  - category
+                  - owner
+                  - _id
+              example:
+                title: "Prueba Premium"
+                description: "ProductoPerros"
+                price: 55
+                thumbnail:
+                  - "VyzOnDaTrack_A_young_man_with_short_black_hair_and_a_trimmed_be_580ede5b-633e-4cac-941e-35e23acac902.png"
+                code: "0000217"
+                stock: 100
+                status: 1
+                category: "GATOS"
+                owner: "647abbac0c0ab55b0dd1f3d1"
+                _id: "6483a6291c82862fb65c61fc"
+        400:
+          description:  >
+            Producto cargado previamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado
+                required:
+                  - error
+                  - status
+              examples:
+                alredyLoadedProduct:
+                  value:
+                    summary: "El producto ya se encuentra cargado"
+                    error: "El producto code: 0000217 ya se encuentra cargado"
+                    status: 400
+                invalidParams:
+                  value:
+                    summary: "Alguno de los parametros ingresados es invalido"
+                    error: "Parámetros inválidos"
+                    status: 400
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/products/{productID}:
+    delete:
+      security:
+        - cookieAuth: []
+      summary: Eliminar un producto
+      tags:
+        - Productos
+      description:  Eliminar un producto. Solo podran eliminar productos usuarios admin o Premium. Siendo estos ultimos unicamente capaces de eliminar los propios
+      parameters:
+        - name: productID
+          in: path
+          description: Id del producto a eliminar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Producto eliminado con éxito
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                deletedCount:
+                  type: integer
+                  description: Cantidad de elementos eliminados
+              required:
+                - deletedCount
+              example:
+                deletedCount: 1
+        404:
+          description:  >
+            Producto no registardo
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Mensaje de error
+                status:
+                  type: integer
+                  description: Código de estado
+              required:
+                - error
+                - status
+              example:
+                error: "El id de producto 6483adb9f4abe7623be9d661 no se encuentra registrado"
+                status: 404
+        400:
+          description:  >
+            Producto cargado previamente
+          content:
+            application/json:
+              schema:
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      security:
+        - cookieAuth: []
+      summary: Actualizar un producto
+      tags:
+        - Productos
+      description:  Actualizar un producto. Solo podran actualizar productos usuarios admin o Premium. Siendo estos ultimos unicamente capaces de eliminar los propios
+      parameters:
+        - name: productID
+          in: path
+          description: Id del producto a actualizar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                code:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                categoty:
+                  type: string
+                thumbnails:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description:  >
+            Producto cargado con éxito
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                  description: Unique identifier for the product
+                title:
+                  type: string
+                  description: Title of the product
+                description:
+                  type: string
+                  description: Description of the product
+                price:
+                  type: number
+                  description: Price of the product
+                thumbnail:
+                  type: array
+                  items:
+                    type: string
+                  description: List of thumbnails for the product
+                code:
+                  type: string
+                  description: Code of the product
+                stock:
+                  type: integer
+                  description: Stock quantity of the product
+                status:
+                  type: integer
+                  description: Status of the product
+                category:
+                  type: string
+                  description: Category of the product
+                owner:
+                  type: string
+                  description: Owner of the product
+              required:
+                - _id
+                - title
+                - description
+                - price
+                - thumbnail
+                - code
+                - stock
+                - status
+                - category
+                - owner
+              example:
+                _id: "648640e9220cf514b2e6ed09"
+                title: "Producto1 Actualizado"
+                description: "Este es el primer producto actualizado"
+                price: 555.55
+                thumbnail: []
+                code: "456abc"
+                stock: 10
+                status: 1
+                category: "GATOS"
+                owner: "647abbac0c0ab55b0dd1f3d1"
+        400:
+          description:  >
+            Producto cargado previamente
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Mensaje de error
+                status:
+                  type: integer
+                  description: Código de estado
+              required:
+                - error
+                - status
+              example:
+                error: "Parámetros inválidos"
+                status: 400
+        401:
+          description:  >
+            Producto cargado previamente
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  description: Mensaje de error
+                status:
+                  type: integer
+                  description: Código de estado
+              required:
+                - error
+                - status
+              example:
+                error: "El usuario 647abbac0c0ab55b0dd1f3d1 no es dueño del producto 6418ebc22f166e0c8789257b"
+                status: 401
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  responses:
+    UnauthorizedError:
+      description: Error interno en el servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                description: Mensaje de error
+              status:
+                type: integer
+                description: Código de estado de la respuesta
+            required:
+              - error
+          examples:
+            NoAuthtoken:
+              values:
+                error: "No auth token"
+            Unauthorized:
+              values:
+                error: "Usuario no autorizado"
+                message: "Unauthorized"
+    InvalidParams:
+      description: Parametros invalidos
+    InternalServerError:
+      description: Error interno en el servidor
+      content:
+        application/json:
+          schema:
+          type: object
+          properties:
+            error:
+              type: string
+              description: Mensaje de error
+            status:
+              type: integer
+              description: Código de estado
+          required:
+            - error
+            - status
+          example:
+            error: "Internal Server Error"
+            status: 500
+
+tags:
+  - Productos
+  - Autenticación
+  - Carro

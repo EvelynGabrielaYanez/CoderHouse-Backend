@@ -12,6 +12,9 @@ import { authVerification } from './utils/jwt.js';
 import { onError } from './midldlewares/errors/index.js';
 import logger from './utils/logger.js';
 import { log } from './midldlewares/logger/index.js';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDocument from './configuration/swagger.js';
+import { swaggerApi } from './utils/constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -30,6 +33,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(cors(corsOptions));
 app.use(authVerification('jwt'));
+
+
+app.use(swaggerApi, swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 mongoose.connect(env.dbUrl, {
     useNewUrlParser: true,

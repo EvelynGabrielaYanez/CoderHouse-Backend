@@ -71,5 +71,7 @@ export const ERROR_DICTIONARY = {
   INVALID_RECOVER_PASSWORD: 'La nueva contraseña debe ser distinta a la anterior',
   INVALID_USER_ROLE: 'Rol de usuario invalido',
   INVALID_PRODUCT: 'El producto no se encuentra en registrado. Id: {0}',
-  PRODUCT_OWNER_CART_ADD: 'No es posible agregar productos si es el dueño. Dueño: {0} - Producto: {1}'
+  PRODUCT_OWNER_CART_ADD: 'No es posible agregar productos si es el dueño. Dueño: {0} - Producto: {1}',
+  INVALID_CART: 'El carro no se encuentra en registrado. Id: {0}',
+  INVALID_CART_OR_PRODUCT: 'El carro no se encuentra registrado o el producto no se encuentra en el carro. Id del carro: {0}. Id del producto: {1}'
 }

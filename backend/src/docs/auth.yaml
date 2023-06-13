@@ -1,0 +1,114 @@
+openapi: 3.0.0
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt
+security:
+  - cookieAuth: []
+paths:
+  /api/session/login:
+    post:
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description:  >
+            Autenticado con exito
+            Se retorna el token de sesion el la cookie `jwt`. Los request siguiente que se encuentran autenticado requieren que esta se encuentre seteada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de respuesta
+                  userData:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: ID del usuario
+                      firstName:
+                        type: string
+                        description: Nombre del usuario
+                      lastName:
+                        type: string
+                        description: Apellido del usuario
+                      email:
+                        type: string
+                        description: Correo electrónico del usuario
+                      age:
+                        type: integer
+                        description: Edad del usuario
+                      cart:
+                        type: string
+                        description: ID del carrito de compras del usuario
+                      role:
+                        type: string
+                        description: Rol del usuario
+                      password:
+                        type: string
+                        description: Contraseña del usuario
+                      __v:
+                        type: integer
+                        description: Versión del objeto
+                example:
+                  message: "Creedenciales validas"
+                  userData:
+                    _id: "647abbac0c0ab55b0dd1f3d1"
+                    firstName: "EvelynCursos"
+                    lastName: "Yanez"
+                    email: "evelyn.yanez.cursos@gmail.com"
+                    age: 28
+                    cart: "647abbac0c0ab55b0dd1f3cf"
+                    role: "Premium"
+                    password: "$2b$15$usrMGYpu.8T24zrCYN.C0eV2JPYVjtU9qjK6qPjMk6izjcL76dlcq"
+                    __v: 0
+                required:
+                  - message
+                  - userData
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: jwt=abcde12345; Path=/; HttpOnly
+
+  /api/session/logout:
+    get:
+      tags:
+        - Autenticación
+      responses:
+        200:
+          description:  >
+            Deslogueado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Mensaje de respuesta
+              example:
+                message: "Logout con exito"
+                required:
+                  - message
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: Path=/; HttpOnly

@@ -51,7 +51,7 @@ export default class CartsManager {
     const cart = await this.getCartById(cid);
     if (!cart) throw new InvalidParams(translate(ERROR_DICTIONARY.CART_DOESNT_EXIT, cid));
     const productToAdd = await Product.findById(pid);
-    if (!productToAdd) throw new InvalidParams(ERROR_DICTIONARY.INVALID_PRODUCT, pid);
+    if (!productToAdd) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_PRODUCT, pid));
     if (ownerRole === USER_ROLES.PREMIUM && String(ownerId) === productToAdd.owner) throw new InvalidParams(translate(ERROR_DICTIONARY.PRODUCT_OWNER_CART_ADD, ownerId, pid));
     await cart.addProduct({ pid });
     await cart.save();
@@ -64,7 +64,7 @@ export default class CartsManager {
    * @returns
    */
   async deleteProduct({ cid, pid }) {
-    const result = await Carts.updateOne({_id: cid}, {
+    const result = await Carts.findByIdAndUpdate({_id: cid}, {
       $pull: {
         products: { product: pid }
       }
@@ -73,7 +73,7 @@ export default class CartsManager {
   }
 
   async updateProductQty({ cid, pid , qty }) {
-    const result = await Carts.updateOne({
+    const result = await Carts.findOneAndUpdate({
       _id: cid,
       "products.product": pid,
     },
@@ -82,24 +82,27 @@ export default class CartsManager {
         "products.$.quantity": qty
       }
     }).exec();
+    if (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART_OR_PRODUCT, cid, pid));
     return result;
   }
 
   async updateProducts(cid, products) {
-    const result = await Carts.updateOne({_id: cid}, {
+    const result = await Carts.findByIdAndUpdate(cid, {
       $set: {
         products: products
       }
     }).exec();
+    if  (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART, cid));
     return result;
   }
 
   async deleteProducts(cid) {
-    const result = await Carts.updateOne({_id: cid}, {
+    const result = await Carts.findByIdAndUpdate(cid, {
       $set: {
         products: []
       }
     }).exec();
+    if (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART, cid));
     return result;
   }
 
@@ -121,8 +124,6 @@ export default class CartsManager {
       return { productsWithoutStock, productsWithSock };
     }, Promise.resolve({ productsWithoutStock: [], productsWithSock: []}))
   }
-
-
 
   async purchase (cid, purchaser) {
     const cart = await this.getCartById(cid);
