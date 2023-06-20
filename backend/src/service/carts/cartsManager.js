@@ -54,8 +54,7 @@ export default class CartsManager {
     if (!productToAdd) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_PRODUCT, pid));
     if (ownerRole === USER_ROLES.PREMIUM && String(ownerId) === productToAdd.owner) throw new InvalidParams(translate(ERROR_DICTIONARY.PRODUCT_OWNER_CART_ADD, ownerId, pid));
     await cart.addProduct({ pid });
-    await cart.save();
-    return cart;
+    return cart.save().then(t => t.populate('products.product'));
   }
 
   /**
@@ -91,7 +90,7 @@ export default class CartsManager {
       $set: {
         products: products
       }
-    }).exec();
+    }, { new: true }).exec();
     if  (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART, cid));
     return result;
   }
@@ -101,7 +100,7 @@ export default class CartsManager {
       $set: {
         products: []
       }
-    }).exec();
+    }, { new: true } ).exec();
     if (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART, cid));
     return result;
   }
