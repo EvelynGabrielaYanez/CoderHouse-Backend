@@ -67,4 +67,19 @@ export default class UserHttpManager {
       next(error);
     }
   }
+
+  static async saveDocument (req, res, next) {
+    try {
+      const { uid: userId } = req.params;
+      const documents = req.files?.map((fileData) => fileData.originalname) || [];
+      if (!documents.length) throw new InvalidParams(ERROR_DICTIONARY.INVALID_PARAMS);
+      documents.forEach((fileName) => {
+        if (!fileName || typeof fileName !== 'string') throw new InvalidParams(ERROR_DICTIONARY.INVALID_PARAMS);
+      });
+      const response = await UserManager.saveDocument({ userId, documents });
+      res.status(200).json({ status: 'success', message: 'Rol cambiado con éxito.', response });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -7,7 +7,7 @@ import { USER_ROLES } from '../utils/constants.js';
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req,file, cb) => {
-      cb(null, 'src/public/img')
+      cb(null, 'src/public/products')
     },
     filename: (req,file,cb) => {
       cb(null, `${file.originalname}`)

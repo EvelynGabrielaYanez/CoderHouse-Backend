@@ -20,7 +20,7 @@ export const errorHandler = ({ error, res }) => {
 }
 
 export class CustomError extends Error {
-  constructor (message = 'Error', httpErrorCode) {
+  constructor (message = 'Error', httpErrorCode = null) {
     super (message);
     this.httpErrorCode = httpErrorCode ?? EnumErrors.INTERNAL_SERVER_ERROR;
   }

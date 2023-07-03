@@ -1,7 +1,7 @@
 import config from "../../configuration/config.js";
 import User from "../../dao/models/user.js";
 import { compareHash, createHash } from "../../utils/bcrypt.js";
-import { USER_ROLES } from "../../utils/constants.js";
+import { USER_ROLES, baseURL } from "../../utils/constants.js";
 import { BadRequest, ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
 import { generateToken } from "../../utils/jwt.js";
 import { translate } from "../../utils/string.js";
@@ -109,5 +109,25 @@ export default class UserManager {
       }
     }).exec();
     return userUpdated;
+  }
+
+  /**
+   * Método encargado de cambiar el role. En caso de ser Premium se parara a User y viceversa
+   * @param {{ userId: string, documents: [{ name: string, reference: string }]}} userData
+   * @returns { User }
+   */
+  static async saveDocument ({ userId, documents }) {
+    const userToUpdate = await UserManager.findById(userId);
+    if (!userToUpdate) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_USER_ID, userId));
+    if(!userToUpdate.documents?.length) userToUpdate.documents = [];
+    const newDocuments = documents.reduce((newDocuments, fileName) => {
+      if (userToUpdate.documents.every(document=> document.name !== fileName)) {
+        newDocuments.push({ name: fileName, reference: `${baseURL}/documents/${fileName}` });
+      }
+      return newDocuments;
+    },[]);
+    userToUpdate.documents = [ ...userToUpdate.documents, ...newDocuments];
+    console.log(userToUpdate);
+    return userToUpdate.save();
   }
 }

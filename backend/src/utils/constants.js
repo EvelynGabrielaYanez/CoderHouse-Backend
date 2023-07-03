@@ -7,10 +7,16 @@ export const recoverUserPath = '/api/user/recover';
 
 export const swaggerApi = '/api-docs'
 
+export const publicRoutes = [
+  '/products',
+  '/profile',
+  '/documents'
+]
+
 export const unauthorizedEndpondList = [
   '/api/session/login',
   '/api/user',
-  '/api/user/send-recover-email'
+  '/api/user/send-recover-email',
 ];
 
 export const USER_ROLES = {
@@ -18,3 +24,5 @@ export const USER_ROLES = {
   USER: 'User',
   PREMIUM: 'Premium'
 }
+
+export const baseURL = 'http://localhost:8080';

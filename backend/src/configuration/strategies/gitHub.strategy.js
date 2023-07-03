@@ -5,11 +5,12 @@ import User from '../../dao/models/user.js';
 import { createHash } from '../../utils/bcrypt.js';
 import CartsManager from '../../service/carts/cartsManager.js';
 import env  from '../../configuration/config.js';
+import { baseURL } from '../../utils/constants.js';
 
 export const gitHubStrategy = new GitHubStrategy({
   clientID: env.clientId,
   clientSecret: env.clientSecret,
-  callbackURL: 'http://localhost:8080/authSession/githubSession',
+  callbackURL: `${baseURL}/authSession/githubSession`,
   passReqToCallback: true
 }, async (req, accessToken, refreshToken, profile, done) => {
   try {

@@ -31,6 +31,17 @@ const userSchema = new Schema({
   password: {
       type: String,
       required: true
+  },
+  documents: {
+    type: [{
+      name: String,
+      reference: String
+    }],
+    default: []
+  },
+  last_connection: {
+    type: Date,
+    default: Date.now
   }
 });
 
