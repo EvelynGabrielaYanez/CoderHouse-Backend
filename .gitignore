@@ -1,4 +1,4 @@
 node_modules
 .vscode
-src/public/documents/*
-src/public/products/*
+backend/src/public/documents/*
+backend/src/public/products/*
