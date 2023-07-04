@@ -13,6 +13,8 @@ export default class SessionManager {
       const userBDD = await UserManager.getUser(email)
       if (!userBDD) throw new Unauthorized(ERROR_DICTIONARY.USER_NOT_FOUND);
       if (!compareHash(password, userBDD.password)) throw new Unauthorized('Contraseña no valida');
+      userBDD.last_connection = Date.now();
+      await userBDD.save()
       const token = generateToken({ user: userBDD });
       return { token, userData: userBDD };
     }

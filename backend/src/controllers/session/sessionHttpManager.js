@@ -1,6 +1,7 @@
 import passport from "passport";
 import { BadRequest, ERROR_DICTIONARY, Unauthorized } from "../../utils/error.js";
 import SessionManager from "../../service/session/sessionManager.js";
+import UserManager from "../../service/user/userManager.js";
 
 /**
  * Clase encargada de manejar la captura de errores, validar
@@ -13,7 +14,7 @@ export default class SessionHttpManager {
         const { email, password } = req.body;
         const token = req.cookies?.jwt;
         const response = await SessionManager.login({ email, password, user, token });
-        if (response.token) { 
+        if (response.token) {
           res.cookie('jwt', response.token, { httpOnly: true });
         }
         else req.user = user;
@@ -26,7 +27,11 @@ export default class SessionHttpManager {
 
   static async logout(req, res, next) {
     try {
-      const { jwt } = req.cookies;
+      const { cookies: { jwt }, user: { _id: userId } } = req;
+      const userBDD = await UserManager.findById(userId);
+      if (!userBDD) throw new Unauthorized(ERROR_DICTIONARY.USER_NOT_FOUND);
+      userBDD.last_connection = Date.now();
+      await userBDD.save();
       if (!jwt) throw new BadRequest(ERROR_DICTIONARY.INVALID_SESSION);
       res.clearCookie('jwt');
       res.status(200).json({ message: 'Logout con exito' })
