@@ -21,7 +21,8 @@ const logger = createLogger({
     ]
   : [
       new transports.File({ filename: './logs/error.log', level: 'error' }),
-      new transports.File({ filename: './logs/ecommers.log', level: 'info'})
+      new transports.File({ filename: './logs/ecommers.log', level: 'info'}),
+      new transports.Console({ level: 'info' })
     ]
   }
 );
