@@ -1,0 +1,972 @@
+{
+	"info": {
+		"_postman_id": "a089c70d-78df-42e4-aba6-7ba7cd8c1b97",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15603098",
+		"_collection_link": "https://martian-satellite-449104.postman.co/workspace/prueba~2f1e0773-f126-40ec-9837-af95ad86bf1f/collection/15603098-a089c70d-78df-42e4-aba6-7ba7cd8c1b97?action=share&creator=15603098&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "session",
+			"item": [
+				{
+					"name": "loginUser",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"evelyn.yanez.cursos@gmail.com\", \"password\": \"evelyn_newPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/session/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"session",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginAdmin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"admin@admin.com\", \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/session/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"session",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logOut",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/session/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"session",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "current",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/session/current",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"session",
+								"current"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"EvelynCursos\",\r\n  \"lastName\": \"Yanez\",\r\n  \"email\": \"evelyn.yanez.cursos@gmail.com\",\r\n  \"age\": 28,\r\n  \"password\": \"evelyn_prueba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recover-email",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"evelyn.yanez.cursos@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/send-recover-email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"send-recover-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recover",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"evelyn.yanez.cursos@gmail.com\",\r\n  \"newPassword\": \"evelyn_newPassword\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/recover",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"recover"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "chage-premium-role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/user/premium/647abbac0c0ab55b0dd1f3d1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"premium",
+								"647abbac0c0ab55b0dd1f3d1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "carts",
+			"item": [
+				{
+					"name": "create-cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-cart-products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carts/647abbac0c0ab55b0dd1f3cf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"647abbac0c0ab55b0dd1f3cf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-cart-productsAdmin (cambiar token antes de correr)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carts/6457e5fa1a3deda1e767f021",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"6457e5fa1a3deda1e767f021"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-cart-product",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/647abbac0c0ab55b0dd1f3cf/product/6418eb9e2f166e0c8789256b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"647abbac0c0ab55b0dd1f3cf",
+								"product",
+								"6418eb9e2f166e0c8789256b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-cart-product Admin (cambiar token antes de correr)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/6457e5fa1a3deda1e767f021/product/6418ebd22f166e0c8789258b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"6457e5fa1a3deda1e767f021",
+								"product",
+								"6418ebd22f166e0c8789258b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/carts/6438ae35282c3a5bea6fc6df/purchase",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carts",
+								"6438ae35282c3a5bea6fc6df",
+								"purchase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "get-products",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products?page=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-product-by-id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products/6438ae35282c3a5bea6fc6df",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"6438ae35282c3a5bea6fc6df"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-product-no-premium",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Producto1 Actualizado",
+									"contentType": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Este es el primer producto actualizado",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "456abc",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "555.55",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "PERROS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/6418ebc22f166e0c8789257b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"6418ebc22f166e0c8789257b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-product-premium",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Producto1 Actualizado",
+									"contentType": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Este es el primer producto actualizado",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "456abc",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "555.55",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "10",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "PERROS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/647d53dbeab15980ed1de4a9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"647d53dbeab15980ed1de4a9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save-product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Prueba Premium",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ProductoPerros",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "0000214",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "55",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GATOS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-product-premium",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Prueba Premium",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ProductoPerros",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "0000212",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "55",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GATOS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/647e7d7a142f30063c99dc78",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"647e7d7a142f30063c99dc78"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-product-no-premium",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Prueba Premium",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "ProductoPerros",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "0000212",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "55",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "GATOS",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/products/6418eb752f166e0c87892567",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products",
+								"6418eb752f166e0c87892567"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": "get-messages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/message",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"message"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "new-message",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"Hola, prueba!\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/message/save",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"message",
+								"save"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "mock",
+			"item": [
+				{
+					"name": "mockProducts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/mockingProducts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"mockingProducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logTest",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/loggerTest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"loggerTest"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJ1c2VyIjp7Il9pZCI6IjY0MzhhZTM1MjgyYzNhNWJlYTZmYzZlMSIsImZpcnN0TmFtZSI6IlBydWViYSIsImxhc3ROYW1lIjoiUHJ1ZWJhQXBlbGxpZG8iLCJlbWFpbCI6InBydWViYUBwcnVlYmEuY29tIiwiYWdlIjo1MCwiY2FydCI6eyJfaWQiOiI2NDM4YWUzNTI4MmMzYTViZWE2ZmM2ZGYiLCJwcm9kdWN0cyI6W3sicHJvZHVjdCI6eyJfaWQiOiI2NDE4ZWJkMjJmMTY2ZTBjODc4OTI1OGIiLCJ0aXRsZSI6IlBydWViYSBQcm9kdWN0byIsImRlc2NyaXB0aW9uIjoiUHJvZHVjdG9QZXJyb3MiLCJwcmljZSI6NTUsInRodW1ibmFpbCI6WyJDYXB0dXJhLWVycm9yLkpQRyJdLCJjb2RlIjoiMDAwMDEwIiwic3RvY2siOjEwMCwic3RhdHVzIjoxLCJjYXRlZ29yeSI6IlBFUlJPUyJ9LCJxdWFudGl0eSI6MSwiX2lkIjoiNjQzOGI3N2QyMzk1ZWI3YjNiMGJmMGExIn0seyJwcm9kdWN0Ijp7Il9pZCI6IjY0MThlYmQ0MmYxNjZlMGM4Nzg5MjU4ZiIsInRpdGxlIjoiUHJ1ZWJhIFByb2R1Y3RvIiwiZGVzY3JpcHRpb24iOiJQcm9kdWN0b1BlcnJvcyIsInByaWNlIjo1NSwidGh1bWJuYWlsIjpbIkNhcHR1cmEtZXJyb3IuSlBHIl0sImNvZGUiOiIwMDAwMTEiLCJzdG9jayI6MTAwLCJzdGF0dXMiOjEsImNhdGVnb3J5IjoiUEVSUk9TIn0sInF1YW50aXR5IjoyLCJfaWQiOiI2NDM4Yjc4MTIzOTVlYjdiM2IwYmYwYTgifSx7InByb2R1Y3QiOnsiX2lkIjoiNjQxOGViYzIyZjE2NmUwYzg3ODkyNTdiIiwidGl0bGUiOiJQcnVlYmEgUHJvZHVjdG8iLCJkZXNjcmlwdGlvbiI6IlByb2R1Y3RvUGVycm9zIiwicHJpY2UiOjUwLCJ0aHVtYm5haWwiOlsiQ2FwdHVyYS1lcnJvci5KUEciXSwiY29kZSI6IjAwMDA2Iiwic3RvY2siOjksInN0YXR1cyI6MSwiY2F0ZWdvcnkiOiJQRVJST1MifSwicXVhbnRpdHkiOjEsIl9pZCI6IjY0MzhjYmVhYzIzNGExZWQ4Njk5NWE0OSJ9XSwiX192IjozfSwicm9sZSI6IlVzZXIiLCJwYXNzd29yZCI6IiQyYiQxMCRjMnpmR0FJRXJFdUZFQXpqTDRiQ2FlWVNHQVVNUDQ4dmJGR3hCNkJUVEE1VHFLNWhOdHhKYSIsIl9fdiI6MH0sImlhdCI6MTY4MzQ4MDE1NSwiZXhwIjoxNjgzNTY2NTU1fQ"
+		}
+	]
+}

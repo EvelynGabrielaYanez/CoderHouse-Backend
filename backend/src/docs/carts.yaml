@@ -1,0 +1,908 @@
+
+paths:
+  /api/carts:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Retorna el listado de todos los carritos
+      tags:
+        - Carro
+      description: Retorna el listado de todos los carritos con el detalle de los productos
+      responses:
+        200:
+          description:  >
+            Listado de carritos con el detalle de cada producto en el carro
+          content:
+            application/json:
+              schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              description: ID del producto
+                            title:
+                              type: string
+                              description: Título del producto
+                            description:
+                              type: string
+                              description: Descripción del producto
+                            price:
+                              type: number
+                              description: Precio del producto
+                            thumbnail:
+                              type: array
+                              items:
+                                type: string
+                                description: URL de la imagen del producto
+                            code:
+                              type: string
+                              description: Código del producto
+                            stock:
+                              type: integer
+                              description: Stock disponible del producto
+                            status:
+                              type: integer
+                              description: Estado del producto
+                            category:
+                              type: string
+                              description: Categoría del producto
+                            __v:
+                              type: integer
+                              description: Versión del producto
+                            owner:
+                              type: string
+                              description: ID del propietario del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto
+                        _id:
+                          type: string
+                          description: ID de la relación producto-usuario
+                  __v:
+                    type: integer
+                    description: Versión del usuario
+              required:
+                - _id
+                - products
+                - __v
+            example:
+              - _id: "6438ae35282c3a5bea6fc6df"
+                products:
+                  - product:
+                      _id: "6418ebd22f166e0c8789258b"
+                      title: "Prueba Producto"
+                      description: "ProductoPerros"
+                      price: 55
+                      thumbnail:
+                        - "Captura-error.JPG"
+                      code: "000010"
+                      stock: 0
+                      status: 1
+                      category: "PERROS"
+                      __v: 15
+                      owner: "admin"
+                    quantity: 3
+                    _id: "645855cb208b420826a5bdf2"
+                  - product:
+                      _id: "6418ebd42f166e0c8789258f"
+                      title: "Prueba Producto"
+                      description: "ProductoPerros"
+                      price: 55
+                      thumbnail:
+                        - "Captura-error.JPG"
+                      code: "000011"
+                      stock: 13
+                      status: 1
+                      category: "PERROS"
+                      __v: 41
+                      owner: "admin"
+                    quantity: 5
+                    _id: "64587336dd4578792d3d91f0"
+                  - product:
+                      _id: "6418eb202f166e0c87892563"
+                      title: "Cuarto Producto"
+                      description: "Producto sin imagen"
+                      price: 900
+                      thumbnail:
+                        - "2023-02-02.png"
+                        - "Captura-error.JPG"
+                      code: "00030"
+                      stock: 95
+                      status: 1
+                      category: "GATOS"
+                      __v: 1
+                      owner: "admin"
+                    quantity: 5
+                    _id: "6458734bdd4578792d3d9221"
+                __v: 9
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      security:
+        - cookieAuth: []
+      summary: Crear un carrito
+      tags:
+        - Carro
+      description: Crea un carrito nuevo y retorna el detalle de la instancia del mismo
+      responses:
+        200:
+          description:  >
+            Detalle del carrito creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito
+                  products:
+                    type: array
+                    items:
+                      type: object
+                required:
+                  - _id
+                  - products
+              example:
+                _id: "648646e1336e1f190b8fe37b"
+                products: []
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/carts/{cartId}:
+    get:
+      security:
+        - cookieAuth: []
+      summary: Buscar carrito
+      tags:
+        - Carro
+      description: Busca un carrito por id retorna el detalle de la instancia del mismo con el detalle de los productos que lo componen
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carrito
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Carrito con el detalle de los productos que lo componen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              description: ID del producto
+                            title:
+                              type: string
+                              description: Título del producto
+                            description:
+                              type: string
+                              description: Descripción del producto
+                            price:
+                              type: number
+                              description: Precio del producto
+                            thumbnail:
+                              type: array
+                              items:
+                                type: string
+                              description: Imágenes en miniatura del producto
+                            code:
+                              type: string
+                              description: Código del producto
+                            stock:
+                              type: integer
+                              description: Stock disponible del producto
+                            status:
+                              type: integer
+                              description: Estado del producto
+                            category:
+                              type: string
+                              description: Categoría del producto
+                            owner:
+                              type: string
+                              description: ID del propietario del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto
+                        _id:
+                          type: string
+                          description: ID del elemento de la matriz
+                required:
+                  - _id
+                  - products
+                  - __v
+              example:
+                _id: "647abbac0c0ab55b0dd1f3cf"
+                products:
+                  - product:
+                      _id: "647e7e58b43b721b12a2915e"
+                      title: "Producto1 Actualizado"
+                      description: "Este es el primer producto actualizado"
+                      price: 555.55
+                      thumbnail: []
+                      code: "456abc"
+                      stock: 10
+                      status: 1
+                      category: "GATOS"
+                      owner: "647abbac0c0ab55b0dd1f3d1"
+                    quantity: 4
+                    _id: "647e7ec92cb1253d00a8e05b"
+                  - product:
+                      _id: "6418eb9e2f166e0c8789256b"
+                      title: "Primer Producto"
+                      description: "ProductoPerros"
+                      price: 50
+                      thumbnail: ["Captura-error.JPG"]
+                      code: "00002"
+                      stock: 20
+                      status: 1
+                      category: "PERROS"
+                      owner: "admin"
+                    quantity: 1
+                    _id: "647e8011277a5c8786d82180"
+              __v: 2
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description:  >
+            Listado de carritos con el detalle de cada producto en el carro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado HTTP
+                required:
+                  - error
+                  - status
+              example:
+                error: "El id ingresado 647abbac0c0ab55b0dd1f3ff no corresponde a un id que se encuentre registrado"
+                status: 404
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      security:
+        - cookieAuth: []
+      summary: Actualizar un producto
+      tags:
+        - Carro
+      description:  Actualizar un producto. Solo podran actualizar productos usuarios admin o Premium. Siendo estos ultimos unicamente capaces de eliminar los propios
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro a actualizar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  product:
+                    type: string
+                    description: ID del producto
+                  quantity:
+                    type: integer
+                    description: Cantidad del producto
+              required:
+                - product
+                - quantity
+            example:
+              - product: "647e7e58b43b721b12a2915e"
+                quantity: 20
+      responses:
+        200:
+          description:  >
+            Se retrna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del usuario
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto
+                        _id:
+                          type: string
+                          description: ID del elemento
+                required:
+                  - _id
+                  - products
+                  - __v
+              example:
+                _id: "647abbac0c0ab55b0dd1f3cf"
+                products:
+                  - product: "647e7e58b43b721b12a2915e"
+                    quantity: 20
+                    _id: "64864e0a4df06d61220a9ed8"
+                __v: 2
+          400:
+            description:  >
+              El producto pasado por parametro no existe
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: Mensaje de error
+                    status:
+                      type: integer
+                      description: Código de estado
+                  required:
+                    - error
+                    - status
+                example:
+                  error: "El id de producto 647e7e58b43b721b12a2912e no se encuentra registrado"
+                  status: 400
+          401:
+            $ref: '#/components/responses/UnauthorizedError'
+          500:
+            $ref: '#/components/responses/InternalServerError'
+    delete:
+      security:
+        - cookieAuth: []
+      summary: Eliminar todos los productos del carro
+      tags:
+        - Carro
+      description:  Eliminar todos los productos del carro
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro a vaciar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Se retrna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito
+                  products:
+                    type: array
+                    items:
+                      type: object
+                    description: Lista de productos en el carrito
+                required:
+                  - _id
+                  - products
+              example:
+                _id: "648646e1336e1f190b8fe37b"
+                products: []
+          400:
+            description:  >
+              El producto pasado por parametro no existe
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: Mensaje de error
+                    status:
+                      type: integer
+                      description: Código de estado
+                  required:
+                    - error
+                    - status
+                example:
+                  error: "El carro no se encuentra registrado. Id: 648646e1336e1f190b8fe47b"
+                  status: 400
+          401:
+            $ref: '#/components/responses/UnauthorizedError'
+          500:
+            $ref: '#/components/responses/InternalServerError'
+
+  /api/carts/{cartId}/purchase:
+    post:
+      security:
+        - cookieAuth: []
+      summary: Generar un ticket
+      tags:
+        - Carro
+      description:  >
+        Genera un ticket con los productos en carrito validando que se tenga stock del producto.
+        En caso de no haber stock retorna el id del producto que no tiene stock y genera el ticket con los que puede.
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro comprar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Se retrna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ticket:
+                    type: object
+                    properties:
+                      amount:
+                        type: number
+                        description: Monto del ticket
+                      purchaser:
+                        type: string
+                        description: Correo electrónico del comprador
+                      _id:
+                        type: string
+                        description: ID del ticket
+                      purchaseDatetime:
+                        type: string
+                        format: date-time
+                        description: Fecha y hora de la compra
+                    required:
+                      - amount
+                      - purchaser
+                      - _id
+                      - purchaseDatetime
+                  productsWithoutStock:
+                    type: array
+                    items:
+                      type: string
+                      description: IDs de los productos sin stock
+                required:
+                  - ticket
+                  - productsWithoutStock
+                example:
+                  ticket:
+                    amount: 0
+                    purchaser: "evelyn.yanez.cursos@gmail.com"
+                    _id: "6486509a174d412e0f307da3"
+                    purchaseDatetime: "2023-06-11T22:54:18.069Z"
+                  productsWithoutStock:
+                    - "647e7e58b43b721b12a2915e"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        404:
+          description:  >
+            Listado de carritos con el detalle de cada producto en el carro
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado HTTP
+                required:
+                  - error
+                  - status
+                example:
+                  error: "El id ingresado 647abbac0c0ab55b0dd1f3ff no corresponde a un id que se encuentre registrado"
+                  status: 404
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/carts/{cartId}/product/{productId}:
+    put:
+      security:
+        - cookieAuth: []
+      summary: Actualiza la cantidad de un producto en el carro
+      tags:
+        - Carro
+      description:  >
+        Actualiza la cantidad de un producto en el carro y retorna la instancia modificada
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Id del producto comprar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  qty: Cantidad del producto
+              required:
+                - qty
+              example:
+                quantity: 20
+      responses:
+        200:
+          description:  >
+            Se retrna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carrito
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto en el carrito
+                        _id:
+                          type: string
+                          description: ID del elemento del carrito
+                    description: Lista de productos en el carrito
+                  __v:
+                    type: integer
+                    description: Versión del carrito
+                required:
+                  - _id
+                  - products
+                  - __v
+                example:
+                  _id: "647abbac0c0ab55b0dd1f3cf"
+                  products:
+                    - product: "647e7e58b43b721b12a2915e"
+                      quantity: 1
+                      _id: "6486516bb29bdfa22c9c2706"
+                  __v: 2
+        400:
+          description:  >
+            El producto pasado por parametro no existe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado
+                required:
+                  - error
+                  - status
+                example:
+                  error: "El carro no se encuentra registrado o el producto no se encuentra en el carro. Id del carro: 647abbac0c0ab55b0dd1f3cf. Id del producto: 647e7e58b43b721b12a2925e"
+                  status: 400
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      security:
+        - cookieAuth: []
+      summary: Agrega un producto al carro
+      tags:
+        - Carro
+      description:  >
+        Agrega un producto al carro y en caso de ya estar lo incrementa en uno
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Id del producto comprar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Se retorna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carro
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: object
+                          properties:
+                            _id:
+                              type: string
+                              description: ID del producto
+                            title:
+                              type: string
+                              description: Título del producto
+                            description:
+                              type: string
+                              description: Descripción del producto
+                            price:
+                              type: number
+                              description: Precio del producto
+                            thumbnail:
+                              type: array
+                              items:
+                                type: string
+                              description: Lista de imágenes del producto
+                            code:
+                              type: string
+                              description: Código del producto
+                            stock:
+                              type: integer
+                              description: Stock disponible del producto
+                            status:
+                              type: integer
+                              description: Estado del producto
+                            category:
+                              type: string
+                              description: Categoría del producto
+                            owner:
+                              type: string
+                              description: Propietario del producto
+                            __v:
+                              type: integer
+                              description: Versión del producto
+                          required:
+                            - _id
+                            - title
+                            - description
+                            - price
+                            - thumbnail
+                            - code
+                            - stock
+                            - status
+                            - category
+                            - owner
+                            - __v
+                          description: Información del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto en el carro
+                        _id:
+                          type: string
+                          description: ID del objeto en el carro
+                    description: Lista de productos en el carro
+                  __v:
+                    type: integer
+                    description: Versión del carro
+                required:
+                  - _id
+                  - products
+                  - __v
+              example:
+                _id: "647abbac0c0ab55b0dd1f3cf"
+                products:
+                  - product:
+                      _id: "647e7e58b43b721b12a2915e"
+                      title: "Producto1 Actualizado"
+                      description: "Este es el primer producto actualizado"
+                      price: 555.55
+                      thumbnail: []
+                      code: "456abc"
+                      stock: 8
+                      status: 1
+                      category: "GATOS"
+                      owner: "647abbac0c0ab55b0dd1f3d1"
+                      __v: 2
+                    quantity: 15
+                    _id: "6486516bb29bdfa22c9c2706"
+                  - product:
+                      _id: "6418ebcd2f166e0c87892587"
+                      title: "Prueba Producto"
+                      description: "ProductoPerros"
+                      price: 50
+                      thumbnail:
+                        - "Captura-error.JPG"
+                      code: "00009"
+                      stock: 100
+                      status: 1
+                      category: "PERROS"
+                      owner: "admin"
+                    quantity: 2
+                    _id: "6487bc2ddaedda69d481b976"
+                __v: 3
+        400:
+          description:  >
+            El producto pasado por parametro no existe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado
+                required:
+                  - error
+                  - status
+              example:
+                error: "El carro no se encuentra registrado o el producto no se encuentra en el carro. Id del carro: 647abbac0c0ab55b0dd1f3cf. Id del producto: 647e7e58b43b721b12a2925e"
+                status: 400
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      security:
+        - cookieAuth: []
+      summary: Eliminar producto del carrito
+      tags:
+        - Carro
+      description:  >
+        Eliminar producto del carrito
+      parameters:
+        - name: cartId
+          in: path
+          description: Id del carro
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Id del producto comprar
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        200:
+          description:  >
+            Se retorna la instancia del carrito con el nuevo listado de productos y cantidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: ID del carro
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: string
+                          description: ID del producto
+                        quantity:
+                          type: integer
+                          description: Cantidad del producto en el carro
+                        _id:
+                          type: string
+                          description: ID del elemento en el carro
+                required:
+                  - _id
+                  - products
+                  - __v
+              example:
+                _id: "647abbac0c0ab55b0dd1f3cf"
+                products:
+                  - product: "6418ebcd2f166e0c87892587"
+                    quantity: 3
+                    _id: "6487bc2ddaedda69d481b976"
+                __v: 3
+        400:
+          description:  >
+            El producto pasado por parametro no existe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Mensaje de error
+                  status:
+                    type: integer
+                    description: Código de estado
+                required:
+                  - error
+                  - status
+              example:
+                error: "El carro no se encuentra registrado o el producto no se encuentra en el carro. Id del carro: 647abbac0c0ab55b0dd1f3cf. Id del producto: 647e7e58b43b721b12a2925e"
+                status: 400
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalServerError'

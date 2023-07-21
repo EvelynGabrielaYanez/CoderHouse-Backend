@@ -1,0 +1,10 @@
+<div class="header" id="myHeader">
+  <h1>Productos en el Carro</h1>
+  <div class="buttonHeader">
+    <button id="btnCart" onClick="goToProduct()"><i class="fa-solid fa-circle-arrow-left fa-2xl" style="font-size:20px;color:black;"></i></button>
+  </div>
+</div>
+ <div id='products'>
+    {{> table/table data=data abm=false}}
+  </div>
+</div>
