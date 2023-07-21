@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { nodeEnv } from '../utils/constants.js';
 dotenv.config({
-  path: process.env.NODE_ENV === nodeEnv.production ? './.env.development' : './.env.production'
+  path: process.env.NODE_ENV === nodeEnv.production ? './.env.production' : './.env.development'
 });
 
 export default {

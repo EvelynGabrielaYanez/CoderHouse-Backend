@@ -16,10 +16,12 @@ const upload = multer({
 
 const routerUser = Router()
 
-routerUser.post("/", UserHttpManager.create);
+routerUser.get("/", UserHttpManager.findAll);
+routerUser.delete("/", UserHttpManager.delete);
+routerUser.post("/register", UserHttpManager.create);
 routerUser.post("/:uid/documents", upload.array('documents'), UserHttpManager.saveDocument);
 routerUser.post("/premium/:uid", UserHttpManager.changeRole);
 routerUser.post("/send-recover-email", UserHttpManager.sendRecoverEmail);
-routerUser.post("/recover/:token", UserHttpManager.recover);
+routerUser.post("/recover", UserHttpManager.recover);
 
 export default routerUser;

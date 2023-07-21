@@ -1,38 +1,29 @@
-const styles = {
-  cartDetail: {
-    backgroundColor: '#fff',
-    position: 'absolute',
-    marginTop: 30,
-    boxShadow: '1px 5px 5px rgb(0,0,0,0.1)',
-    borderRadius: '5px',
-    width: '300px',
-    right: 50
-  },
-  ul: {
-    margin: 0,
-    padding: 0
-  },
-  product: {
-    listStyleType: 'none',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '25px 20px',
-    borderBottom: 'solid 1px #aaa'
-  }
-}
-const CartDetails = ({ cart }) => {
+import { Menu, MenuItem, Typography } from "@mui/material";
+
+const CartDetails = ({ products, anchorElUser, handleCloseUserMenu }) => {
   return (
-    <div style={styles.cartDetail}>
-      <ul style={styles.ul}>
-        {cart.map(product =>
-          <li key={product.name} style={styles.product}>
-            <img alt={product.name} src={product.img} width='50' height='32'/>
-            {product.name} <span>{product.qty}</span>
-          </li>
-        )}
-      </ul>
-    </div>
+    <Menu
+      sx={{ mt: '45px' }}
+      id="menu-appbar"
+      anchorEl={anchorElUser}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={Boolean(anchorElUser)}
+      onClose={handleCloseUserMenu}
+    >
+      {products.map(({ product: { title }, qty }) => (
+        <MenuItem key={title} >
+          <Typography textAlign="center">{`${title} ${qty}`}</Typography>
+        </MenuItem>
+      ))}
+    </Menu>
   );
 }
 

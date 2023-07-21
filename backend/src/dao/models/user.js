@@ -49,6 +49,16 @@ userSchema.pre('find', function() {
   this.populate('cart');
 });
 
-const User = mongoose.model('user', userSchema);
+const UserModel = mongoose.model('user', userSchema);
 
-export default User;
+export default class User extends UserModel {
+  constructor(data) {
+    super(data);
+  }
+
+  static async findAndDelete(filter, config) {
+    const userList = await User.find(filter).exec();
+    await User.deleteMany(filter, config);
+    return userList;
+  }
+};

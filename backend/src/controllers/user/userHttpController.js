@@ -14,6 +14,7 @@ export default class UserHttpManager {
    */
   static async create(req, res, next) {
     try {
+      console.log(req.body)
       const { firstName, lastName, email, age, password } = req.body;
       if (!firstName || !lastName || !email || !age || !password) throw new InvalidParams(translate(ERROR_DICTIONARY.CREATE_USER_INVALID_PARAMS, firstName, lastName, email, age));
       const { user } = await UserManager.register({ firstName, lastName, email, age, password });
@@ -78,6 +79,25 @@ export default class UserHttpManager {
       });
       const response = await UserManager.saveDocument({ userId, documents });
       res.status(200).json({ status: 'success', message: 'Rol cambiado con éxito.', response });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async findAll (_req, res, next) {
+    try {
+      const response = (await UserManager.findAll())
+                                        .map(({ firstName, lastName, email, agre, role }) => ({ firstName, lastName, email, agre, role }));
+      res.status(200).json(response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async delete (_req, res, next) {
+    try {
+      const response = await UserManager.deleteInactives();
+      res.status(200).json(response);
     } catch (error) {
       next(error);
     }

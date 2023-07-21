@@ -1,57 +1,240 @@
-import { useRef } from "react"
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { deepPurple } from '@mui/material/colors';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { closeAlert, showAlert } from '../../redux/alert/alertSice';
+import { URL } from '../../utils/constants';
 
-export const Register = () => {
+const defaultTheme = createTheme();
 
-    const datForm = useRef() //Crear una referencia para consultar los valoresa actuales del form
-
-    const consultarForm = (e) => {
-        //Consultar los datos del formulario
-        e.preventDefault()
-
-        const datosFormulario = new FormData(datForm.current) //Pasar de HTML a Objeto Iterable
-        const cliente = Object.fromEntries(datosFormulario) //Pasar de objeto iterable a objeto simple
-        fetch('http://localhost:8080/api/user', {
-            method: "POST",
-            headers: {
-                'Authorization': 'bearer ' + document.cookie.split("; ").find((row) => row.startsWith("token="))?.split("=")[1],
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(cliente)
-        }).then(response => response.json())
-            .then(data => {
-                document.cookie = `token=${data.token};expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()};path=/`
-                console.log(data.token)
-            })
-            .catch(error => console.error(error))
-        e.target.reset() //Reset form
+export default function Register() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [state, setState] = useState({
+    formData: {
+        password: {
+        value: '',
+        errorMessage: ''
+      },
+      email: {
+        value: '',
+        errorMessage: ''
+      },
+      name: {
+        value: '',
+        errorMessage: ''
+      },
+      age: {
+        value: '',
+        errorMessage: ''
+      },
+      lastName: {
+        value: '',
+        errorMessage: ''
+      }
     }
-    return (
-        <div className="container divForm" >
-            <h3>Formulario de registro</h3>
-            <form onSubmit={consultarForm} ref={datForm}>
-                <div className="mb-3">
-                    <label htmlFor="first_name" className="form-label">Nombre</label>
-                    <input type="text" className="form-control" name="first_name" required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="last_name" className="form-label">Apellido</label>
-                    <input type="text" className="form-control" name="last_name" required />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">Email</label>
-                    <input type="email" className="form-control" name="email" />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="age" className="form-label">Edad</label>
-                    <input type="number" className="form-control" name="age" />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="password" className="form-label">Contraseña</label>
-                    <input type="password" className="form-control" name="password" />
-                </div>
+  });
+  const { formData } = state;
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      if(Object.values(formData).find(({ errorMessage, value }) => errorMessage || !value.length)) throw new Error('Campos invalidos');
+      const data = new FormData(event.currentTarget);
+      const requestData = {
+        email: data.get('email'),
+        firstName: data.get('name'),
+        lastName: data.get('lastName'),
+        age: parseInt(data.get('age')),
+        password: data.get('password')
+      };
+      await register(requestData);
+      navigate('/login');
+    } catch (error) {
+      dispatch(showAlert({ message: error.message }));
+      setTimeout(() => dispatch(closeAlert()), 2000);
+    }
+  };
 
-                <button type="submit" className="btn btn-primary">Registrar</button>
-            </form>
-        </div>
-    )
+  const register = async ({ firstName, lastName, age, email, password }) => {
+    const url = `${URL}/api/user/register`;
+    console.log(url)
+    const loginResponse = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        age,
+        password
+      })
+    });
+    const response = await loginResponse.json();
+    if(loginResponse.status === 400)  throw new Error('Parametros invalidos');
+    if(loginResponse.status === 500) throw new Error('Error en el servidor');
+    if(loginResponse.status === 409) throw new Error('El usuario ya se encuentra registrado');
+    if(loginResponse.status !== 200) throw new Error('Error en el servidor inesperado');
+    return response;
+  }
+
+  const isValidInput = ({ target: { value, type, id, required }}, typeValidate ,size = null) => {
+    try {
+      if (required && !value.length) throw new Error('El campo es obligatorio');
+      type = typeValidate || type;
+      console.log(type)
+      const validateInput = {
+        email: (value) => /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/.test(value),
+        integer: (value) => /^\d+$/.test(value) ,
+        text: (value) => /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ ]*[a-zA-ZñÑáéíóúÁÉÍÓÚ])?$/.test(value),
+      }
+      const typeTranslate = {
+        email: 'correo',
+        integer: 'entero',
+        text: 'texto sin cracteres especiales'
+      }
+      const validateInputFunction = validateInput[type];
+      if (validateInputFunction && !validateInputFunction(value)) throw new Error(`El registro debe ser ${typeTranslate[type]}`);
+      if (size && value.length < size)  throw new Error(`El largo debe ser como máximo de ${size}`);
+      setState({ ...state, formData: { ...formData, [id]:{ value, errorMessage: null }}});
+    } catch (error) {
+      setState({ ...state, formData: { ...formData, [id]:{ value, errorMessage: error.message}}});
+    }
+  }
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component='main' maxWidth='xs' sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}>
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            boxShadow: 5,
+            background: '#ffff',
+            padding: 5
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: deepPurple[500], width: 70, height: 70 }}>
+            <AccountCircleIcon sx={{ fontSize: 65 }}/>
+          </Avatar>
+          <Typography component='h1' variant='h5'>
+            Registrar Usuario
+          </Typography>
+          <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin='normal'
+              required
+              fullWidth
+              id='email'
+              label='Direccion de Email'
+              name='email'
+              type='email'
+              autoComplete='email'
+              autoFocus
+              error={!!formData.email.errorMessage}
+              helperText={formData.email.errorMessage}
+              onChange={event => isValidInput(event)}
+              on={event => isValidInput(event)}
+              onBlur={event => isValidInput(event)}
+            />
+            <TextField
+              margin='normal'
+              required
+              fullWidth
+              id='name'
+              label='Nombre'
+              name='name'
+              autoComplete='name'
+              error={!!formData.name.errorMessage}
+              helperText={formData.name.errorMessage}
+              onBlur={event => isValidInput(event)}
+            />
+            <TextField
+              margin='normal'
+              required
+              fullWidth
+              id='lastName'
+              label='Apellido'
+              name='lastName'
+              autoComplete='lastName'
+              error={!!formData.lastName.errorMessage}
+              helperText={formData.lastName.errorMessage}
+              onChange={event => isValidInput(event)}
+              onBlur={event => isValidInput(event)}
+            />
+            <TextField
+              margin='normal'
+              required
+              fullWidth
+              name='age'
+              label='Edad'
+              type='number'
+              id='age'
+              autoComplete='age'
+              error={!!formData.age.errorMessage}
+              helperText={formData.age.errorMessage}
+              onChange={event => isValidInput(event, 'integer')}
+              onBlur={event => isValidInput(event, 'integer')}
+            />
+            <TextField
+              margin='normal'
+              required
+              fullWidth
+              name='password'
+              label='Contraseña'
+              type='password'
+              id='password'
+              autoComplete='current-password'
+              error={!!formData.password.errorMessage}
+              helperText={formData.password.errorMessage}
+              onChange={event => isValidInput(event)}
+              onBlur={event => isValidInput(event)}
+            />
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              sx={{ mt: 3, mb: 2, bgcolor: deepPurple[500] }}
+            >
+              Registrar
+            </Button>
+            <Grid container >
+              <Grid item xs container
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+                >
+                <Link href='/login' variant='body2'>
+                  Volver
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
 }

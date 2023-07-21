@@ -20,11 +20,14 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
 
 //Rutas validas a mi servidor
-const whiteList = [ 'http://localhost:3000' ];
+const whiteList = [ 'http://localhost:3000', 'http://localhost:8080' ];
 
 //Reviso si el cliente que intenta ingresar a mi servidor esta o no en esta lista
 const corsOptions = {
-    origin: (origin, callback) => whiteList.indexOf(origin) === -1 ? callback(null, true) : callback(new Error('Not allowed by Cors'))
+    origin: (origin, callback) => {
+      return callback(null, true);//whiteList.includes(origin) ? callback(null, true) : callback(new Error('Not allowed by Cors'));
+    },
+    credentials: true
 }
 
 const app = express();
@@ -33,7 +36,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(cors(corsOptions));
 app.use(authVerification('jwt'));
-
 
 app.use(swaggerApi, swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 

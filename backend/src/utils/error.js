@@ -7,6 +7,7 @@ const EnumErrors = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  CONFICT: 409,
   INTERNAL_SERVER_ERROR: 500
 }
 
@@ -47,6 +48,12 @@ export class InvalidParams extends CustomError {
 export class Unauthorized extends CustomError {
   constructor (message = 'Unauthorized') {
     super(message, EnumErrors.UNAUTHORIZED);
+  }
+}
+
+export class Conflict extends CustomError {
+  constructor (message = 'Conflict') {
+    super(message, EnumErrors.CONFICT);
   }
 }
 

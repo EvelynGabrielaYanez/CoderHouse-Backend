@@ -1,26 +1,17 @@
-import Product from "../Product/Product";
+import { Grid } from "@mui/material";
+import Product from "../Product/Product.jsx";
 
-const styles = {
-  products: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
-}
-
-const ProductsList = (props) => {
-  const { products, addToCart } = props
+const ProductsList = ({ products, addToCart, deleteFromCart }) => {
   return (
-    <div style={styles.products}>
-      {products.map(product =>
-        <Product
-          addToCart={addToCart}
-          key={product.name}
-          product={product}
-          />
-        )
-      }
-    </div>
+    <Grid container spacing={4}>
+    {products.map((product) => (
+      <Product key={product}
+        deleteFromCart={deleteFromCart}
+        addToCart={addToCart}
+        product={product}
+      />
+    ))}
+  </Grid>
   );
 }
 

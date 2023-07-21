@@ -1,8 +1,10 @@
 import config from "../../configuration/config.js";
+import Carts from "../../dao/models/carts.js";
 import User from "../../dao/models/user.js";
 import { compareHash, createHash } from "../../utils/bcrypt.js";
 import { USER_ROLES, baseURL } from "../../utils/constants.js";
-import { BadRequest, ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
+import { subtractDays } from "../../utils/date.js";
+import { Conflict, ERROR_DICTIONARY, InvalidParams } from "../../utils/error.js";
 import { generateToken } from "../../utils/jwt.js";
 import { translate } from "../../utils/string.js";
 import CartsManager from "../carts/cartsManager.js";
@@ -43,15 +45,44 @@ export default class UserManager {
   }
 
   /**
+   * Método encargado de buscar un usuario por id
+   * @returns {[User]}
+   */
+  static async findAll() {
+    return User.find().exec();
+  }
+
+  /**
+   * Método encargado de eliminar un usuario por fecha limite de conexion
+   * @returns {{ limitDate: Date }}
+   */
+  static async delete({ limitDate }) {
+    const deletedUsers = await User.findAndDelete({
+      last_connection: {
+        "$lt": limitDate
+      }
+    });
+    const idList = deletedUsers.map(user => user.cart._id);
+    await Carts.deleteMany({ _id: { $in: idList } });
+    return deletedUsers;
+  }
+
+  /**
+   * Método encargado de eliminar todos los usuarios inactivos en los ultimos dos dias
+   * @returns
+   */
+  static async deleteInactives() {
+    return UserManager.delete({ limitDate: subtractDays(new Date(), 2) });
+  }
+
+  /**
    * Método encargado de registrar un usuario
    * @param {{ email: string, firstName: string, lastName: string, age: number, password: string }} UserData
    * @returns {{ user: User }}
    */
   static async register({ email, firstName, lastName, age, password }) {
     const user = await UserManager.getUser(email);
-    if (user) {
-      throw new BadRequest(translate(ERROR_DICTIONARY.ALREDY_REGISTERED, email));
-    }
+    if (user) throw new Conflict(translate(ERROR_DICTIONARY.ALREDY_REGISTERED, email));
     return {
       user: await UserManager.create({ firstName, lastName, email, age, password })
     };

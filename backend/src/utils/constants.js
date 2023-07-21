@@ -15,7 +15,7 @@ export const publicRoutes = [
 
 export const unauthorizedEndpondList = [
   '/api/session/login',
-  '/api/user',
+  '/api/user/register',
   '/api/user/send-recover-email',
 ];
 
