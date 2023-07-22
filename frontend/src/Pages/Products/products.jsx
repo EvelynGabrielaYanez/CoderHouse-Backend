@@ -46,10 +46,10 @@ export default function Products() {
         </Container>
       </main>
       <PaginationOutlined
-        count={paginateData.totalPages}
-        page={paginateData.page}
-        onChange={handleChange}
-      />
+            count={paginateData.totalPages}
+            page={paginateData.page}
+            onChange={handleChange}
+          />
     </ThemeProvider>
   );
 }

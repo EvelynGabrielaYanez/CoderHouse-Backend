@@ -69,7 +69,6 @@ export default function Register() {
 
   const register = async ({ firstName, lastName, age, email, password }) => {
     const url = `${URL}/api/user/register`;
-    console.log(url)
     const loginResponse = await fetch(url, {
       method: 'POST',
       headers: {
@@ -95,7 +94,6 @@ export default function Register() {
     try {
       if (required && !value.length) throw new Error('El campo es obligatorio');
       type = typeValidate || type;
-      console.log(type)
       const validateInput = {
         email: (value) => /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/.test(value),
         integer: (value) => /^\d+$/.test(value) ,

@@ -158,7 +158,6 @@ export default class UserManager {
       return newDocuments;
     },[]);
     userToUpdate.documents = [ ...userToUpdate.documents, ...newDocuments];
-    console.log(userToUpdate);
     return userToUpdate.save();
   }
 }

@@ -67,7 +67,7 @@ export default class CartsManager {
       $pull: {
         products: { product: pid }
       }
-    }).exec();
+    }, { new: true }).exec();
     return result;
   }
 
@@ -80,7 +80,7 @@ export default class CartsManager {
       "$set": {
         "products.$.quantity": qty
       }
-    }).exec();
+    }, { new: true }).exec();
     if (!result) throw new InvalidParams(translate(ERROR_DICTIONARY.INVALID_CART_OR_PRODUCT, cid, pid));
     return result;
   }

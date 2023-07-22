@@ -13,10 +13,8 @@ export default class CartsHttpManager {
    */
   static async getProducts (req, res, next) {
     try {
-      console.log("entra a carts")
       const cid = req.params.cid;
       const response = await (new CartsManager().getCartsProducts(cid));
-      console.log(response)
       res.status(200).json(response);
     } catch (error) {
       next(error);

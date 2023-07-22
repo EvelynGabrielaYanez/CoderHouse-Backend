@@ -14,7 +14,6 @@ export default class UserHttpManager {
    */
   static async create(req, res, next) {
     try {
-      console.log(req.body)
       const { firstName, lastName, email, age, password } = req.body;
       if (!firstName || !lastName || !email || !age || !password) throw new InvalidParams(translate(ERROR_DICTIONARY.CREATE_USER_INVALID_PARAMS, firstName, lastName, email, age));
       const { user } = await UserManager.register({ firstName, lastName, email, age, password });

@@ -9,14 +9,10 @@ export default class SessionHttpManager {
   static async login(req, res, next) {
     passport.authenticate('jwt', { session: false }, async (err, user, info) => {
       try {
-        console.log("test",err)
         if (err) throw new Unauthorized(ERROR_DICTIONARY.ERROR_GETTING_TOKEN);
-        console.log("test",err)
         const { email, password } = req.body;
         const token = req.cookies?.jwt;
-        console.log("test1",err)
         const response = await SessionManager.login({ email, password, user, token });
-        console.log("test2",err)
         if (response.token) {
           res.cookie('jwt', response.token, { httpOnly: true });
         }

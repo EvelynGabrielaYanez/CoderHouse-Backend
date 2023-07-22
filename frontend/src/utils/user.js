@@ -1,24 +1,19 @@
 import { URL } from "./constants";
+import { getCookie } from "./cookies";
+import { request } from "./request";
 
-export const findCurrentUser = async({ token }) => {
+export const findCurrentUser = async() => {
   try {
-    console.log("jwt",token)
-    const loginResponse = await fetch(`${URL}/api/session/current`, {
-      method: 'GET',
-      headers: {
-        'Authorization': 'bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    })
+    const loginResponse = await request({ path: 'api/session/current', method: 'GET' });
     const errorMessage = {
       '500': 'Error de conexión',
       '400': 'Parametros invalidos',
       '401': 'Usuario o contraseña incorrectos',
       'default': 'Error inesperado en el servidor'
     };
-    const message = loginResponse.status !== 200 ? (errorMessage[loginResponse.status] ?? errorMessage.default) : '';
+    const message = loginResponse.status && loginResponse.status !== 200 ? (errorMessage[loginResponse.status] ?? errorMessage.default) : '';
     if (message.length) throw new Error(message);
-    return loginResponse.json();
+    return loginResponse;
   } catch (error) {
     console.error(error);
     return null;

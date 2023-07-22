@@ -13,12 +13,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { closeAlert, showAlert } from '../../redux/alert/alertSice';
 import { login } from './login';
 import { setCartInfo } from '../../redux/cart/cartSlice';
-import { setCookie } from '../../utils/cookies';
 import { getCartProducts } from '../../components/Cart/cart.js';
+import Cookies from 'js-cookie';
 
 
 const defaultTheme = createTheme();
@@ -49,7 +49,7 @@ export default function Login() {
         password: data.get('password')
       }
       const { token, userData: { _id: uid, cart: { _id: cid }} } = await login(requestData);
-      setCookie('jwt', token);
+      Cookies.set('jwt', token);
       const { products } = await getCartProducts({ cid });
       dispatch(setCartInfo({ cid, uid, products }));
       navigate('/products');
@@ -57,6 +57,7 @@ export default function Login() {
       dispatch(showAlert({ message: error.message }));
       setTimeout(() => dispatch(closeAlert()), 2000);
     }
+    return false;
   };
 
   const isValidInput = ({ target: { value, type, id, required }}, typeValidate ,size = null) => {

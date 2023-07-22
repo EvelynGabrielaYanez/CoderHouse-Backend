@@ -16,9 +16,13 @@ export const cartSlice = createSlice({
     setProductList: (state, { payload: { products } }) => {
       state.productList = products;
     },
+    removeOneProduct: (state, { payload: { pid }}) => {
+      const productData = state.productList.find(({ product }) => product._id === pid);
+      productData.quantity -= 1;
+    }
   },
 })
 
-export const { setCartInfo, setProductList } = cartSlice.actions
+export const { setCartInfo, setProductList, removeOneProduct } = cartSlice.actions
 
 export default cartSlice.reducer

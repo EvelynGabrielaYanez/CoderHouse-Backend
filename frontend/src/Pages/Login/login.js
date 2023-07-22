@@ -19,6 +19,5 @@ export const login = async ({ email, password }) => {
   const message = loginResponse.status !== 200 ? (errorMessage[loginResponse.status] ?? errorMessage.default) : '';
   if (message.length) throw new Error(message);
   const response =  await loginResponse.json();
-  console.log(response)
   return response;
 }

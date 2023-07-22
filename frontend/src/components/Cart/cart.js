@@ -1,7 +1,6 @@
 import { request } from '../../utils/request';
 
 export const getCartProducts = async({ cid }) => {
-  console.log(cid)
   const cartResponse = await request({ path: `api/carts/${cid}`, method: 'GET' });
   const errorMessage = {
     '500': 'Error de conexión',
@@ -9,7 +8,6 @@ export const getCartProducts = async({ cid }) => {
     '401': 'Datos invalidos',
     'default': 'Error inesperado en el servidor'
   };
-  console.log(cartResponse);
   const message = cartResponse.status && cartResponse.status !== 200 ? (errorMessage[cartResponse.status] ?? errorMessage.default) : '';
   if (message.length) throw new Error(message);
 
@@ -30,7 +28,10 @@ export const addCartProduct = async({ cid, pid }) => {
 }
 
 export const deleteCartProduct = async({ cid, pid }) => {
-  const response = await request({ path: `api/carts/${cid}/product/${pid}`, method: 'DELETE' });
+  const response = await request({
+    path: `api/carts/${cid}/product/${pid}`,
+    method: 'DELETE'
+  });
   const errorMessage = {
     '500': 'Error de conexión',
     '400': 'Parametros invalidos',
@@ -56,7 +57,8 @@ export const deleteCartAllProducts = async({ cid }) => {
 }
 
 export const updateCartProductQty = async({ cid, pid, qty }) => {
-  const response = await request({ path: `api/carts/${cid}`, method: 'DELETE', body: { product: pid, quantity: qty } });
+  console.log('qty', qty)
+  const response = await request({ path: `api/carts/${cid}/product/${pid}`, method: 'PUT', body: { qty } });
   const errorMessage = {
     '500': 'Error de conexión',
     '400': 'Parametros invalidos',

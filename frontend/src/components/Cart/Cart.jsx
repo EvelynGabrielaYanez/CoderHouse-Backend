@@ -15,9 +15,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Cart = ({ cartDetailsVisible, showCart, anchorElUser, handleCloseUserMenu}) => {
   const cartState = useSelector(state => state.cart);
-  console.log(cartState)
   const { productList } = cartState;
-  const qty = productList.reduce((accum, product) => accum + product.qty, 0);
+  const qty = productList.reduce((accum, product) => accum + product.quantity, 0);
   return (
     <Box sx={{ my: 2, color: 'white', display: 'block' }}>
       <Tooltip title="Detalle Carro">

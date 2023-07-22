@@ -1,13 +1,26 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { addCartProduct, deleteCartProduct } from "../Cart/cart";
+import { addCartProduct, updateCartProductQty } from "../Cart/cart";
+import { URL } from "../../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { removeOneProduct, setProductList } from "../../redux/cart/cartSlice";
 
-const Product = ({ product:{ _id: pid, title: name, price } }) => {
-
-  const removeCartProduct = (e) => {
-    console.log(e)
+const Product = ({ product:{ _id: pid, title: name, price, thumbnail } }) => {
+  const cart = useSelector(state => state.cart);
+  const { cartId: cid, productList } = cart;
+  const dispatch = useDispatch();
+  const removeCartProduct = async() => {
+    try {
+      const productInCart = productList.find(({product}) => product._id === pid);
+      if(!productInCart) throw new Error('El producto no esta en el carro');
+      await updateCartProductQty({ pid, cid, qty: productInCart.quantity - 1 });
+      dispatch(removeOneProduct({ pid }));
+    } catch (error) {
+      console.error(error);
+    }
   }
-  const addProductToCart = (e) => {
-    console.log(e)
+  const addProductToCart = async() => {
+    let { products } = await addCartProduct({ pid, cid });
+    dispatch(setProductList({ products }));
   }
   return (
     <Grid item key={pid} xs={12} sm={6} md={4}>
@@ -17,7 +30,7 @@ const Product = ({ product:{ _id: pid, title: name, price } }) => {
           sx={{
             pt: '56.25%',
           }}
-          image="https://source.unsplash.com/random?wallpapers"
+          image={thumbnail ?? `${URL}/products/no-default.png`}
         />
         <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="h2">
