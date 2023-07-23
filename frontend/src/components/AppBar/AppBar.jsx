@@ -1,70 +1,79 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import { AppBar, Container, Avatar, Button, Tooltip, MenuItem, createTheme, IconButton, Typography, Menu, Toolbar, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { logOutUser } from '../../redux/user/userSlice';
+import { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { URL } from '../../utils/constants';
 import Cart from '../Cart/Cart.jsx';
+import { validateLogin } from '../Cart/cart';
+import { setCartInfo } from '../../redux/cart/cartSlice';
+import { request } from '../../utils/request';
+import Cookies from 'js-cookie';
 
 const  defaultTheme = createTheme();
 
-const logOut = async ({ token }) => {
-  const loginResponse = await fetch(`${URL}/api/session/logout`, {
-    method: 'GET',
-    headers: {
-      'Authorization': 'bearer ' + token,
-      'Content-Type': 'application/json'
-    }
-  })
+const logOut = async () => {
+  const logOutResponse = request({ path: 'api/session/logout', method: 'GET' });
   const errorMessage = {
     '500': 'Error de conexión',
     '400': 'Parametros invalidos',
     '401': 'Usuario o contraseña incorrectos',
     'default': 'Error inesperado en el servidor'
   };
-  const message = loginResponse.status !== 200 ? (errorMessage[loginResponse.status] ?? errorMessage.default) : '';
+  const message = logOutResponse.status && logOutResponse.status !== 200 ? (errorMessage[logOutResponse.status] ?? errorMessage.default) : '';
   if (message.length) throw new Error(message);
-  return loginResponse.json();
+  return logOutResponse
 }
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [state, setState] = useState({ loggedUser: false});
   const cartState = useSelector(state => state.cart);
-  const { userId, userName ,cartId, productList } = cartState;
+  const { userName } = cartState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const logOutUser = async () => {
+    try {
+      await logOut();
+      Cookies.remove('jwt');
+      dispatch(setCartInfo({ uid: null , cid: null, products: [] } ));
+      return navigate('/login');
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+
   const pages = [ { displayName: 'Productos', href: '/products' }, {displayName: 'Carro', href: '/cart' } ];
-  const settings = [{ displayName: 'Logout', onClick: async() => (await logOut()) && dispatch(logOutUser)}];
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const settings = [{ displayName: 'Logout', onClick: logOutUser }];
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  useEffect(() => {
+    let isSubscribed = true;
+    try {
+      const fetchData = async () => {
+        const { logged, cid, uid, products } = await validateLogin(cartState);
+        if (!logged) return (<Navigate to='/login'/>);
+        if (isSubscribed && (uid !== cartState.userId || cid !== cartState.cartId)) {
+          dispatch(setCartInfo({ cid, uid, products }));
+        }
+        if (isSubscribed) {
+          setState(state => ({ ...state, loggedUser: true }));
+        }
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error.message);
+      return (<Navigate to='/login'/>)
+    }
+    return () => isSubscribed = false;
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -159,7 +168,7 @@ function ResponsiveAppBar() {
           <Box sx={{ my: 2, color: 'white', display: 'block' }}>
             <Tooltip title="Usuario">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={userName ?? 'D'}/>
+                <Avatar alt={userName ?? 'User'}/>
               </IconButton>
             </Tooltip>
             <Menu

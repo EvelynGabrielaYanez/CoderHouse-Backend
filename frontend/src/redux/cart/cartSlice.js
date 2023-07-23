@@ -18,7 +18,8 @@ export const cartSlice = createSlice({
     },
     removeOneProduct: (state, { payload: { pid }}) => {
       const productData = state.productList.find(({ product }) => product._id === pid);
-      productData.quantity -= 1;
+      if(!(productData.quantity -1)) state.productList.splice(state.productList.findIndex(({ product }) => product._id === pid), 1);
+      else productData.quantity -= 1;
     }
   },
 })

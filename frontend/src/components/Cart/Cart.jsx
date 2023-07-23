@@ -3,6 +3,7 @@ import CartDetails from "./CartDetails.jsx";
 import { Badge, Box, IconButton, Tooltip } from "@mui/material";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styled from "@emotion/styled";
+import { useState } from "react";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -13,14 +14,24 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const Cart = ({ cartDetailsVisible, showCart, anchorElUser, handleCloseUserMenu}) => {
+const Cart = () => {
   const cartState = useSelector(state => state.cart);
+  const [anchorElCart, setAnchorElCart] = useState(null);
   const { productList } = cartState;
+
+  const handleOpenCartDetail = (event) => {
+    setAnchorElCart(event.currentTarget);
+  };
+
+  const handleCloseCartDetail = () => {
+    setAnchorElCart(null);
+  };
+
   const qty = productList.reduce((accum, product) => accum + product.quantity, 0);
   return (
     <Box sx={{ my: 2, color: 'white', display: 'block' }}>
       <Tooltip title="Detalle Carro">
-        <IconButton sx={{ p: 0, marginRight: 3 }}>
+        <IconButton onClick={handleOpenCartDetail} sx={{ p: 0, marginRight: 3 }}>
           <StyledBadge badgeContent={qty} color="secondary">
             <ShoppingCartIcon />
           </StyledBadge>
@@ -28,8 +39,8 @@ const Cart = ({ cartDetailsVisible, showCart, anchorElUser, handleCloseUserMenu}
       </Tooltip>
       <CartDetails
         products={productList}
-        anchorElUser={anchorElUser}
-        handleCloseUserMenu={handleCloseUserMenu}
+        anchorEl={anchorElCart}
+        handleCloseCartDetail={handleCloseCartDetail}
       />
     </Box>
   );

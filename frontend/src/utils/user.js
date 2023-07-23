@@ -1,5 +1,3 @@
-import { URL } from "./constants";
-import { getCookie } from "./cookies";
 import { request } from "./request";
 
 export const findCurrentUser = async() => {

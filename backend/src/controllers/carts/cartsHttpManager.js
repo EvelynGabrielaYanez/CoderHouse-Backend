@@ -74,7 +74,8 @@ export default class CartsHttpManager {
         next(error);
       }
     }
-      /**
+
+  /**
    * Mètodo encargado de recibir la peticion, validar los parametros recibidos,
    *
    * @param {*} req
@@ -84,6 +85,7 @@ export default class CartsHttpManager {
     try {
       const { cid, pid } = req.params;
       const qty = parseInt(req.body.qty);
+      if (qty <= 0) throw new BadRequest(ERROR_DICTIONARY.INVALID_CART_QTY_NEGATIVE);
       if (Number.isNaN(qty)) throw new BadRequest(ERROR_DICTIONARY.INVALID_PARAMS);
       const response = await (new CartsManager().updateProductQty({ cid, pid , qty }));
       res.status(200).json(response);

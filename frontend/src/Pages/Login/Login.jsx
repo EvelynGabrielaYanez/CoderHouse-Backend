@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,17 +12,17 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { deepPurple } from '@mui/material/colors';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeAlert, showAlert } from '../../redux/alert/alertSice';
 import { login } from './login';
 import { setCartInfo } from '../../redux/cart/cartSlice';
-import { getCartProducts } from '../../components/Cart/cart.js';
+import { getCartProducts, validateLogin } from '../../components/Cart/cart.js';
 import Cookies from 'js-cookie';
-
 
 const defaultTheme = createTheme();
 export default function Login() {
+  const cartState = useSelector(state => state.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [state, setState] = useState({
@@ -35,20 +35,39 @@ export default function Login() {
         value: '',
         errorMessage: ''
       }
-    }
+    },
+    loggedUser: false
   });
   const { formData } = state;
+  useEffect(() => {
+    let isSubscribed = true;
+    try {
+      const fetchData = async () => {
+        const { logged, cartId: cid, userId: uid, products } = await validateLogin(cartState);
+        if (!logged) return setState(state => ({ ...state, loggedUser: false }));
+        if (isSubscribed && (uid !== cartState.userId || cid !== cartState.cartId)) {
+          dispatch(setCartInfo({ cid, uid, products }));
+        }
+        if (isSubscribed) setState(state => ({ ...state, loggedUser: true }));
+      }
+      fetchData();
+    } catch (error) {
+      console.error(error);
+      return setState(state => ({ ...state, loggedUser: false }));
+    }
+    return () => isSubscribed = false;
+  }, [dispatch]);
 
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      if(Object.values(formData).find(({ errorMessage, value }) => errorMessage || !value.length)) throw new Error('Campos invalidos');
+      if (Object.values(formData).find(({ errorMessage, value }) => errorMessage || !value.length)) throw new Error('Campos invalidos');
       const data = new FormData(event.currentTarget);
       const requestData = {
         email: data.get('email'),
         password: data.get('password')
       }
-      const { token, userData: { _id: uid, cart: { _id: cid }} } = await login(requestData);
+      const { token, userData: { _id: uid, cart: { _id: cid } } } = await login(requestData);
       Cookies.set('jwt', token);
       const { products } = await getCartProducts({ cid });
       dispatch(setCartInfo({ cid, uid, products }));
@@ -60,13 +79,13 @@ export default function Login() {
     return false;
   };
 
-  const isValidInput = ({ target: { value, type, id, required }}, typeValidate ,size = null) => {
+  const isValidInput = ({ target: { value, type, id, required } }, typeValidate, size = null) => {
     try {
       if (required && !value.length) throw new Error('El campo es obligatorio');
       type = typeValidate || type;
       const validateInput = {
         email: (value) => /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/.test(value),
-        integer: (value) => /^\d+$/.test(value) ,
+        integer: (value) => /^\d+$/.test(value),
         text: (value) => /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]([a-zA-ZñÑáéíóúÁÉÍÓÚ ]*[a-zA-ZñÑáéíóúÁÉÍÓÚ])?$/.test(value),
       }
       const typeTranslate = {
@@ -76,14 +95,15 @@ export default function Login() {
       }
       const validateInputFunction = validateInput[type];
       if (validateInputFunction && !validateInputFunction(value)) throw new Error(`El registro debe ser ${typeTranslate[type]}`);
-      if (size && value.length < size)  throw new Error(`El largo debe ser como máximo de ${size}`);
-      setState({ ...state, formData: { ...formData, [id]:{ value, errorMessage: null }}});
+      if (size && value.length < size) throw new Error(`El largo debe ser como máximo de ${size}`);
+      setState({ ...state, formData: { ...formData, [id]: { value, errorMessage: null } } });
     } catch (error) {
-      setState({ ...state, formData: { ...formData, [id]:{ value, errorMessage: error.message}}});
+      setState({ ...state, formData: { ...formData, [id]: { value, errorMessage: error.message } } });
     }
   }
-
-
+  if (state.loggedUser) {
+    return (<Navigate to='/products' />);
+  }
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component='main' maxWidth='xs' sx={{
@@ -107,7 +127,7 @@ export default function Login() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: deepPurple[500], width: 70, height: 70 }}>
-            <AccountCircleIcon sx={{ fontSize: 65 }}/>
+            <AccountCircleIcon sx={{ fontSize: 65 }} />
           </Avatar>
           <Typography component='h1' variant='h5'>
             Iniciar sesión

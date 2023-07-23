@@ -10,7 +10,6 @@ export const request = async({ auth = true, path, method, body }) => {
       }
     }
     if (body) requestParams.body = JSON.stringify(body);
-    console.log('body', requestParams)
     if (auth) requestParams.headers.Authorization = `bearer ${getCookie('jwt')}`;
     const response = await fetch(`${URL}/${path}`, requestParams);
     if (response.status !== 200) return { status: response.status};

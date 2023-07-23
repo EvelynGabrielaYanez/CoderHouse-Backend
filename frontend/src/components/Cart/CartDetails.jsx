@@ -1,11 +1,11 @@
 import { Menu, MenuItem, Typography } from "@mui/material";
 
-const CartDetails = ({ products, anchorElUser, handleCloseUserMenu }) => {
+const CartDetails = ({ products, anchorEl, handleCloseCartDetail }) => {
   return (
     <Menu
       sx={{ mt: '45px' }}
       id="menu-appbar"
-      anchorEl={anchorElUser}
+      anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -15,12 +15,12 @@ const CartDetails = ({ products, anchorElUser, handleCloseUserMenu }) => {
         vertical: 'top',
         horizontal: 'right',
       }}
-      open={Boolean(anchorElUser)}
-      onClose={handleCloseUserMenu}
+      open={Boolean(anchorEl)}
+      onClose={handleCloseCartDetail}
     >
-      {products.map(({ product: { title }, qty }) => (
+      {products.map(({ product: { title }, quantity }) => (
         <MenuItem key={title} >
-          <Typography textAlign="center">{`${title} ${qty}`}</Typography>
+          <Typography textAlign="center">{`${title} - ${quantity}`}</Typography>
         </MenuItem>
       ))}
     </Menu>

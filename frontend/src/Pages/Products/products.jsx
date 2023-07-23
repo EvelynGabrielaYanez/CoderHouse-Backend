@@ -3,7 +3,7 @@ import * as React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ResponsiveAppBar from '../../components/AppBar/AppBar.jsx';
 import ProductsList from '../../components/ProductList/ProductList.jsx';
-import { Box, Container, CssBaseline, Typography } from '@mui/material';
+import { Container, CssBaseline } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PaginationOutlined from '../../components/Paginate/paginate.jsx';
