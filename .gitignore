@@ -1,5 +1,4 @@
 node_modules
 .vscode
 backend/src/public/documents/*
-backend/src/public/products/*
 backend/src/logs/*

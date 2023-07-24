@@ -1,7 +1,0 @@
-<div class="pagination">
-  {{#if pagination.hasPrevPage}}<a href="{{pagination.prevLink}}">&laquo;</a>{{/if}}
-  {{#each pagination.pagination}}
-    <a href="{{this.link}}" {{#ifEq this.pageNumber ../pagination.page}}class="active"{{/ifEq}}>{{this.pageNumber}}</a>
-  {{/each}}
-  {{#if pagination.hasNextPage}}<a href="{{pagination.nextLink}}" onClick="nextPage('{{pagination.nextLink}}')">&raquo;</a>{{/if}}
-</div>

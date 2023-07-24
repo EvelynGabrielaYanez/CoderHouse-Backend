@@ -31,7 +31,7 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [state, setState] = useState({ loggedUser: false});
   const cartState = useSelector(state => state.cart);
-  const { userName } = cartState;
+  const { userRole } = cartState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ function ResponsiveAppBar() {
     try {
       await logOut();
       Cookies.remove('jwt');
-      dispatch(setCartInfo({ uid: null , cid: null, products: [] } ));
+      dispatch(setCartInfo({ uid: null , cid: null, products: [], userRole: null } ));
       return navigate('/login');
     } catch (error) {
       console.error(error.message);
@@ -58,10 +58,10 @@ function ResponsiveAppBar() {
     let isSubscribed = true;
     try {
       const fetchData = async () => {
-        const { logged, cid, uid, products } = await validateLogin(cartState);
+        const { logged, cid, uid, products, userRole } = await validateLogin(cartState);
         if (!logged) return (<Navigate to='/login'/>);
         if (isSubscribed && (uid !== cartState.userId || cid !== cartState.cartId)) {
-          dispatch(setCartInfo({ cid, uid, products }));
+          dispatch(setCartInfo({ cid, uid, products, userRole }));
         }
         if (isSubscribed) {
           setState(state => ({ ...state, loggedUser: true }));
@@ -128,7 +128,8 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map(({displayName , href}) => (
-                <MenuItem key={displayName} onClick={() => navigate(href)}>
+                (userRole === 'Admin' && displayName === 'Carro') ? null :
+                  <MenuItem key={displayName} onClick={() => navigate(href)}>
                   <Typography textAlign="center">{displayName}</Typography>
                 </MenuItem>
               ))}
@@ -155,6 +156,7 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map(({ displayName , href }) => (
+              (userRole === 'Admin' && displayName === 'Carro') ? null :
               <Button
                 key={displayName}
                 onClick={() => navigate(href)}
@@ -164,11 +166,11 @@ function ResponsiveAppBar() {
               </Button>
             ))}
           </Box>
-          <Cart anchorElUser={anchorElUser} handleCloseUserMenu={handleCloseUserMenu}/>
+          {userRole !== 'Admin' ? <Cart/> : null}
           <Box sx={{ my: 2, color: 'white', display: 'block' }}>
             <Tooltip title="Usuario">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={userName ?? 'User'}/>
+                <Avatar alt={'User'}/>
               </IconButton>
             </Tooltip>
             <Menu

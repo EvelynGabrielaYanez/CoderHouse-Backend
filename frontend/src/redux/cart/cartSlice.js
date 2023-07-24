@@ -5,13 +5,15 @@ export const cartSlice = createSlice({
   initialState: {
     productList: [],
     cartId: null,
-    userId: null
+    userId: null,
+    userRole: null
   },
   reducers: {
-    setCartInfo: (state, { payload: { uid , cid, products } }) => {
+    setCartInfo: (state, { payload: { uid , cid, products, userRole } }) => {
       state.cartId = cid;
       state.userId = uid;
       state.productList = products;
+      state.userRole = userRole;
     },
     setProductList: (state, { payload: { products } }) => {
       state.productList = products;

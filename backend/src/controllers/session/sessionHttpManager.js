@@ -14,7 +14,7 @@ export default class SessionHttpManager {
         const token = req.cookies?.jwt;
         const response = await SessionManager.login({ email, password, user, token });
         if (response.token) {
-          res.cookie('jwt', response.token, { httpOnly: true });
+          res.cookie('jwt', response.token, { httpOnly: false });
         }
         else req.user = user;
         res.status(200).json(response);

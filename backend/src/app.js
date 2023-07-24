@@ -53,9 +53,7 @@ app.use('/', express.static(__dirname + '/public'));
 app.use(router);
 app.use(onError);
 app.all('*', (req, res) => {
-  res.status(404).json({
-    message: `La ruta ${req.url} y el metodo ${req.method} no estan implementados`
-  });
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 // Se inicia la escucha del servidor

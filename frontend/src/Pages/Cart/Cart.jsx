@@ -6,12 +6,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, CssBaseline } from '@mui/material';
 import { request } from '../../utils/request.js';
 import { closeAlert, showAlert } from '../../redux/alert/alertSice.js';
+import { Navigate } from 'react-router-dom';
 
 
 const defaultTheme = createTheme();
 
-export default function Products() {
+export default function Cart() {
   const cart = useSelector(state => state.cart);
+  const { userRole } = cart;
   const dispatch = useDispatch();
   const cartPruchase = async () => {
     try {
@@ -22,8 +24,9 @@ export default function Products() {
       console.error(error.message)
     }
   }
-
   return (
+    userRole === 'Admin' ?
+    <Navigate to='/login'/> :
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
       <ResponsiveAppBar/>

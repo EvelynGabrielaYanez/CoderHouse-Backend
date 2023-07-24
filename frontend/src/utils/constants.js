@@ -1,1 +1,2 @@
-export const URL = `${window.location.protocol}//${window.location.hostname}:8080`;
+export const URL = process.env.NODE_ENV !== 'development' ? `${window.location.origin}` :  `${window.location.protocol}//${window.location.hostname}:8080`;
+export const DOMAIN = process.env.NODE_ENV !== 'development' ? `${window.location.hostname}` :  `${window.location.hostname}:8080`;

@@ -11,7 +11,7 @@ export const authVerification = (strategy) => {
   return async (req, res, next) => {
     if(unauthorizedEndpondList.includes(req.path) ||
       req.path.includes(swaggerApi) ||
-      publicRoutes.some(publicRoute => req.path.startsWith(publicRoute))) return next();
+      !req.path.startsWith('/api')) return next();
     passport.authenticate(strategy, (error, user, info) => {
       if (error) return next(error);
       if (!user) return res.status(401).json({ error: info.message ?? info.toString() });

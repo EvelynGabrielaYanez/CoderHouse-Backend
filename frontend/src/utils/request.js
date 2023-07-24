@@ -1,5 +1,5 @@
-import { URL } from "./constants"
-import { getCookie } from "./cookies";
+import Cookies from "js-cookie";
+import { DOMAIN, URL } from "./constants";
 
 export const request = async({ auth = true, path, method, body }) => {
     const requestParams = {
@@ -10,7 +10,7 @@ export const request = async({ auth = true, path, method, body }) => {
       }
     }
     if (body) requestParams.body = JSON.stringify(body);
-    if (auth) requestParams.headers.Authorization = `bearer ${getCookie('jwt')}`;
+    if (auth) requestParams.headers.Authorization = `bearer ${Cookies.get('jwt',  {  domain : DOMAIN })}`;
     const response = await fetch(`${URL}/${path}`, requestParams);
     if (response.status !== 200) return { status: response.status};
     return response.json();

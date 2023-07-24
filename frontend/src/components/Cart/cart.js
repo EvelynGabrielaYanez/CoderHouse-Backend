@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { request } from '../../utils/request';
 import { findCurrentUser } from '../../utils/user';
+import { DOMAIN } from '../../utils/constants';
 
 export const getCartProducts = async({ cid }) => {
   const cartResponse = await request({ path: `api/carts/${cid}`, method: 'GET' });
@@ -71,21 +72,21 @@ export const updateCartProductQty = async({ cid, pid, qty }) => {
   return { products: response.products };
 }
 
-export const validateLogin = async ({ cartId, userId, productList }) => {
+export const validateLogin = async ({ cartId, userId, productList, userRole }) => {
   try {
-    const token = Cookies.get('jwt');
+    const token = Cookies.get('jwt',  {  domain : DOMAIN });
     if (!token?.length) {
       Cookies.remove('jwt');
-      return { uid: null, cid: null, products:[], logged: false };
+      return { uid: null, cid: null, products:[], logged: false, userRole: null };
     };
     if (!cartId || !userId) {
       const currentUserData = await findCurrentUser();
       const { products } = await getCartProducts({ cid: currentUserData.cart });
-      return { uid: currentUserData._id, cid: currentUserData.cart , products, logged: true };
+      return { uid: currentUserData._id, cid: currentUserData.cart, userRole: currentUserData.role , products, logged: true };
     }
-    return { uid: userId, cid: cartId , products: productList, logged: true };
+    return { uid: userId, cid: cartId , products: productList, logged: true, userRole };
   } catch (error) {
     Cookies.remove('jwt');
-    return { uid: null, cid: null, products:[], logged: false };
+    return { uid: null, cid: null, products:[], logged: false, userRole: null };
   }
 }

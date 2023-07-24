@@ -43,10 +43,10 @@ export default function Login() {
     let isSubscribed = true;
     try {
       const fetchData = async () => {
-        const { logged, cartId: cid, userId: uid, products } = await validateLogin(cartState);
+        const { logged, cartId: cid, userId: uid, products, userRole } = await validateLogin(cartState);
         if (!logged) return setState(state => ({ ...state, loggedUser: false }));
         if (isSubscribed && (uid !== cartState.userId || cid !== cartState.cartId)) {
-          dispatch(setCartInfo({ cid, uid, products }));
+          dispatch(setCartInfo({ cid, uid, products, userRole }));
         }
         if (isSubscribed) setState(state => ({ ...state, loggedUser: true }));
       }
@@ -67,10 +67,10 @@ export default function Login() {
         email: data.get('email'),
         password: data.get('password')
       }
-      const { token, userData: { _id: uid, cart: { _id: cid } } } = await login(requestData);
+      const { token, userData: { _id: uid, cart: { _id: cid }, role: userRole } } = await login(requestData);
       Cookies.set('jwt', token);
       const { products } = await getCartProducts({ cid });
-      dispatch(setCartInfo({ cid, uid, products }));
+      dispatch(setCartInfo({ cid, uid, products, userRole }));
       navigate('/products');
     } catch (error) {
       dispatch(showAlert({ message: error.message }));

@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export const nodeEnv = {
   development: 'development',
   production: 'production'
@@ -6,17 +8,12 @@ export const nodeEnv = {
 export const recoverUserPath = '/api/user/recover';
 
 export const swaggerApi = '/api-docs'
-
-export const publicRoutes = [
-  '/products',
-  '/profile',
-  '/documents'
-]
+export const publicRoutes = fs.readdirSync('src/public/').map(route => `/${route}`);
 
 export const unauthorizedEndpondList = [
   '/api/session/login',
   '/api/user/register',
-  '/api/user/send-recover-email',
+  '/api/user/send-recover-email'
 ];
 
 export const USER_ROLES = {
